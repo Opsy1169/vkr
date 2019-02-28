@@ -39,13 +39,15 @@ def AiI(x):
 
 
 def plotSmthn():
-    x = np.linspace(-0.5, 5, 10000)
+    x = np.linspace(-0.5, 2, 200)
     z = list(map(Ai, x))
     q = sp.fft(z)
+    qshift = np.fft.fftshift(q)
     qphase = list(map(cmath.phase, q))
     qabs = list(map(abs, q))
+    qabsshift = list(map(abs, qshift))
     zphase = list(map(cmath.phase, z))
-    plt.plot(x, qphase, x, qabs)
+    plt.plot( x, qabs, x, qabsshift )
     plt.grid()
     plt.title('t = 1')
     plt.legend(['phase', 'module'])
@@ -211,9 +213,9 @@ def anotherintegrate():
     plt.grid()
     plt.show()
 
-#
+plotSmthn()
 # Pearcey()
-Airy()
+# Airy()
 # InitialAiryPhaze()
 # print(Ai(2))
 # sinpow2()
