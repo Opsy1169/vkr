@@ -1,4 +1,4 @@
-import math as mp
+
 
 from mpl_toolkits.mplot3d import Axes3D
 from sympy import *
@@ -10,6 +10,7 @@ import scipy.fftpack as sp
 from scipy.integrate import quad
 import mpl_toolkits.mplot3d as mpl
 import pylab
+import mpmath as mp
 
 
 def sinpow2():
@@ -21,12 +22,13 @@ def sinpow2():
 
 t = 5
 
+output = 0
 
 def func(x):
     return cmath.exp(1j * (x ** 4) + t * 1j * (x ** 2))
 
 
-Aiparam = 1;
+Aiparam = 5
 
 
 def Ai(x):
@@ -37,30 +39,12 @@ def AiI(x):
 
 
 def plotSmthn():
-    x = np.linspace(-0.5, 0.5, 700)
-    # z = list(map(func, x))
+    x = np.linspace(-0.5, 5, 10000)
     z = list(map(Ai, x))
-    y = np.fft.fft(z);
-    print('----------------------------------------------')
-    yphasenp = list(map(cmath.phase, y))
-
-    yabsnp = list(map(abs, y))
-    z = np.fft.ifft(y)
     q = sp.fft(z)
     qphase = list(map(cmath.phase, q))
     qabs = list(map(abs, q))
-
     zphase = list(map(cmath.phase, z))
-    # plt.plot(x, zphase)
-    # plt.grid()
-    # plt.show()
-    #
-    # plt.plot(x, yphasenp, x, yabsnp)
-    # plt.grid()
-    # plt.title('t = 1')
-    # plt.legend([ 'phase', 'module'])
-    # plt.show()
-
     plt.plot(x, qphase, x, qabs)
     plt.grid()
     plt.title('t = 1')
@@ -71,8 +55,8 @@ def plotSmthn():
 def Pearcey():
     a = 1
     b = 2
-    Nx = 601
-    Nu = 601
+    Nx = 201
+    Nu = 201
 
     x = np.linspace(-3, 3, Nx)
     F = [0] * Nu
@@ -88,25 +72,25 @@ def Pearcey():
     # another = list(map(np.real, F))
     # anotheranother =list(map(np.imag, F))
 
-    # F2dAbs = []
-    #
-    # for i in range(Nu):
-    #     row = [j * Fabs[i] for j in Fabs]
-    #     F2dAbs.append(row)
-    #
-    # # print(F2dAbs[50][50])
-    # arrayF2dAbs = np.array(F2dAbs)
+    F2dAbs = []
+
+    for i in range(Nu):
+        row = [j * Fabs[i] for j in Fabs]
+        F2dAbs.append(row)
+
+    # print(F2dAbs[50][50])
+    arrayF2dAbs = np.array(F2dAbs)
     # print(arrayF2dAbs)
-    # x, y = np.meshgrid(u, u)
+    x, y = np.meshgrid(u, u)
     #
-    # fig = pylab.figure()
-    # axes = Axes3D(fig)
-    # axes.plot_surface(x, y, arrayF2dAbs, cmap=plt.cm.jet)
-    # pylab.show()
+    fig = pylab.figure()
+    axes = Axes3D(fig)
+    axes.plot_surface(x, y, arrayF2dAbs, cmap=plt.cm.jet)
+    pylab.show()
     # print("another done")
-    plt.plot(u, Fabs)
-    plt.grid()
-    plt.show()
+    # plt.plot(u, Fabs)
+    # plt.grid()
+    # plt.show()
     # plt.plot(u, another)
     # plt.grid()
     # plt.show()
@@ -118,28 +102,35 @@ def Pearcey():
 def Airy():
     a = 3
     b = 1
-    Nx = 401
-    Nu =301
+    Nx = 201
+    Nu =101
 
-    x = np.linspace(-2, 2, Nx)
+    x = np.linspace(-1, 3, Nx)
     F = [0] * Nu
     u = np.linspace(-0.1, 4, Nu)
     k = 2*np.pi/(0.000633*1000)
-    print("x: ")
+
     # print(x)
-    print("u: ")
+
     # print(u)
     for j in range(Nu):
         F[j] = 0
         for i in range(Nx - 1):
             F[j] += Ai((x[i] + x[i + 1]) / 2) * cmath.exp((-I * k * ((x[i] + x[i + 1])) * u[j])/2) * (x[i + 1] - x[i])#сейчас в формуле в экспоненте стоит -I, чтобы было похоже на результат Фурье
             # print(F[j])
-        F[j] = F[j] * (2 * a)/(Nx)
+        # F[j] = F[j] * (2 * a)/(Nx)
         # print(F[j])
 
+    G = [0]*Nu
+    for i in range(Nu):
+        G[i] = Float(abs(mp.quad(lambda x: Ai(x) * cmath.exp(-I * k * x * u[i]), [-1, 3])), 15)
+        print(G[i])
+    print(F)
     # print(F)
-    print("done")
+    print("airy")
+    print(k, F[0], u[0])
     Fabs = list(map(abs, F))
+    print(Fabs)
 
     # F2dAbs = []
     #
@@ -157,9 +148,11 @@ def Airy():
     # axes.plot_surface(x, y, arrayF2dAbs, cmap=plt.cm.jet)
     # pylab.show()
     # print("another done")
-    plt.plot(u, Fabs)
+    plt.plot(u, Fabs, u, G)
     plt.grid()
     plt.show()
+
+
 
 def InitialAiryPhaze():
     x = np.linspace(-2, 2, 400)
@@ -169,30 +162,61 @@ def InitialAiryPhaze():
     plt.grid()
     plt.show()
 
-def lists():
-    a = [1, 2, 3]
-    newa = []
-    for j in range(3):
-        row = [i * a[j] for i in a]
-        print(row)
-        newa.append(row)
 
-    print(newa)
+def quadint():
+    Nx = 101
+    Nu = 101
+    x = np.linspace(-2, 2, Nx)
+    Fr = [0] * Nu
+    Fi = [0] * Nu
+    F = [0] * Nu
+    u = np.linspace(-0.1, 4, Nu)
+    k = 2 * np.pi / (0.000633 * 1000)
+    output = 0
 
-#-------------------------------------------------------------------------------------- trying to do the same thing with scipy.integrate
-# def AiryFourier(x, s):
-#     return exp( 1j* Aiparam * (x ** 3) + 1j* x * s)
-# def func(s):
-#     def realAi(x):
-#         return scipy.real(AiryFourier(x, s))
-#     return quad(AiryFourier, -1, 1, args=(s))[0]
+
+    def funcforquad(x, u, k):
+        return (Ai(x) * cmath.exp((I * k * (x) * u)))
+    def funcforquadreal(x, u, k):
+        return scipy.real(Ai(x) * cmath.exp((I * k * (x) * u)))
+    def funcforquadim(x, u, k):
+        return scipy.imag(Ai(x) * cmath.exp((I * k * (x) * u)))
+
+    whole = funcforquad(x[90], u[90], 9)
+    real = funcforquadreal(x[90], u[90], 9)
+    imag = funcforquadim(x[90], u[90], 9)
+    print(scipy.integrate.quad(funcforquadreal, 0, 1, args=(1, 9))[0])
+    print(scipy.integrate.quad(funcforquadim, 0, 1, args=(1, 9))[0])
+
+
+
+
+def anotherintegrate():
+    Nx = 101
+    Nu = 301
+    x = np.linspace(-2, 2, Nx)
+    Fr = [0] * Nu
+    Fi = [0] * Nu
+    F = [0] * Nu
+    mp.dps = 30
+    u = np.linspace(-0.1, 4, Nu)
+    k = 2 * np.pi / (0.000633 * 1000)
+    for i in range(Nu):
+        F[i] = Float(abs(mp.quad(lambda x: Ai(x)*cmath.exp(-I*9.92*x*u[i]), [-1, 3])), 15)
+        print(F[i])
+    print(F)
+
+    # Fabs = list(map(abs, F))
+    plt.plot(u, F)
+    plt.grid()
+    plt.show()
+
 #
-#
-# vec_func = np.vectorize(func)
-# vec_func(np.arange(-0.1, 0.7, 200))
-# plotSmthn()
-
-Pearcey()
-# Airy()
+# Pearcey()
+Airy()
 # InitialAiryPhaze()
 # print(Ai(2))
+# sinpow2()
+# quadint()
+# a()
+# anotherintegrate()
