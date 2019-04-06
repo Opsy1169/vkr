@@ -21,15 +21,21 @@ def sinpow2():
     plt.show()
 
 
-pe_param = 5
+pe_param = 20
 
 output = 0
 
 def Pe(x):
-    return np.exp(1j * (x ** 4) + pe_param * 1j * (x ** 2))
+    return np.exp(1j * (x ** 4) + pe_param* 1j * (x ** 2))
 
 
-Aiparam = 10
+def PeOdd(x):
+    if(x >= 0):
+        return np.exp(1j * (x ** 4) + pe_param * 1j * (x ** 2))
+    else:
+        return np.exp(1j * -(x ** 4) + pe_param * 1j * -(x ** 2))
+
+Aiparam = 15
 
 sigma = 0.1
 def Gauss(x):
@@ -39,7 +45,7 @@ def Ai(x):
     return np.exp(1j * Aiparam * (x ** 3))
 
 def AiI(x):
-    return exp(I * Aiparam * (x ** 3) + I*x)
+    return cmath.exp(I * Aiparam * (x ** 3) + I*x)
 
 def Pe2d(x, y):
     return np.exp(1j*(x**4 + y**4) + 1j*(x**2 + y**2))
@@ -51,8 +57,8 @@ def getInitPe2d():
     xleft = -2
     yright = 2
     yleft = -2
-    nx = 100
-    ny = 100
+    nx = 151
+    ny = 151
     x = np.linspace(xleft, xright, nx)
     y = np.linspace(yleft, yright, ny)
     xstep = abs(x[1] - x[0])
@@ -68,13 +74,14 @@ def getInitPe2d():
     for i in range(len(xmid)):
         xarr = []
         for j in range(len(ymid)):
-            xarr = np.append(xarr, Pe2d(xmid[i], ymid[j])*xstep*ystep)
+             xarr.append(Pe2d(xmid[i], ymid[j])*xstep*ystep)
+
         Fphase.append(xarr)
     # x, y = np.meshgrid(u, u)
 
-    Fphase = np.array(Fphase)
     return Fphase, xmid, ymid
-    # x, y = np.meshgrid(x, y)
+    #
+    # x, y = np.meshgrid(x[0:nx-1:1], y[0:ny-1:1])
     # a= 1
     # fig = pylab.figure()
     # axes = Axes3D(fig)
@@ -86,8 +93,8 @@ def getInitAi2d():
     xleft = -2
     yright = 2
     yleft = -2
-    nx = 101
-    ny = 101
+    nx = 151
+    ny = 151
     x = np.linspace(xleft, xright, nx)
     y = np.linspace(yleft, yright, ny)
     xstep = abs(x[1] - x[0])
@@ -105,14 +112,65 @@ def getInitAi2d():
         for j in range(len(ymid)):
             xarr = np.append(xarr, Ai2d(xmid[i], ymid[j])*xstep*ystep)
         Fphase.append(xarr)
+
+    # Fphase = np.array(Fphase)
+    # fig = pylab.figure()
+    # axes = Axes3D(fig)
+    # axes.plot_surface(x, y, Fphase, cmap=plt.cm.jet)
+    # pylab.show()
     # x, y = np.meshgrid(u, u)
 
     Fphase = np.array(Fphase)
     return Fphase, xmid, ymid
 
+
+def plotPhasetAi2d():
+    xright = 2
+    xleft = -2
+    yright = 2
+    yleft = -2
+    nx = 501
+    ny = 501
+    x = np.linspace(xleft, xright, nx)
+    y = np.linspace(yleft, yright, ny)
+    xstep = abs(x[1] - x[0])
+    ystep = abs(y[1] - y[0])
+    xmid = []
+    ymid = []
+    for i in range(nx-1):
+        xmid.append((x[i+1] + x[i])/2)
+        ymid.append((y[i+1] + y[i])/2)
+    xmid = np.array(xmid)
+    ymid = np.array(ymid)
+    Fphase = []
+    for i in range(len(xmid)):
+        xarr = []
+        for j in range(len(ymid)):
+            xarr.append( Pe2d(x[i], y[j])*xstep*ystep)
+        Fphase.append(xarr)
+
+    for i in range(nx - 1):
+        for j in range(ny - 1):
+            a = Fphase[i][j]
+            a = np.angle(a).real
+            Fphase[i][j] = a
+    Fphase = np.array(Fphase)
+
+    x, y = np.meshgrid(x[0:nx-1:1], y[0:ny-1:1])
+    a = 1
+    Fphase = np.array(Fphase)
+    fig = pylab.figure()
+    axes = Axes3D(fig)
+    axes.plot_surface(x, y, Fphase, cmap=plt.cm.binary)
+    pylab.show()
+    # x, y = np.meshgrid(u, u)
+
+    # Fphase = np.array(Fphase)
+    # return Fphase, xmid, ymid
+
 def Fourier2d():
 
-    init, x, y = getInitAi2d()
+    init, x, y = getInitPe2d()
     start = time.clock()
     # init, x, y = getInitAi2d()
     uleft = -2
@@ -184,18 +242,19 @@ def plotSmthn():
 def Pearcey():
     a = 1
     b = 2
-    Nx = 5001
-    Nu = 3001
-    u_left = -2
-    u_right = 9
-    x_left = -3
-    x_right = 6
+    Nx = 10001
+    Nu = 2001
+    u_left = -5
+    u_right = 5
+    x_left = -7
+    x_right = 7
     # zeros = np.zeros(2000)
-    x = np.linspace(0, x_right, Nx)
+    x = np.linspace(x_left, x_right, Nx)
     # x = np.concatenate((zeros, x))
     F = [0] * Nu
+    f = 1000
     u = np.linspace(u_left, u_right, Nu)
-    k = 2 * np.pi / (0.000633 * 1000)
+    k = 2 * np.pi / (0.000633 * f)
     start = time.clock()
     Fmid = [0] * (Nx - 1)
     for i in range(Nx - 1):
@@ -213,34 +272,27 @@ def Pearcey():
     # another = list(map(np.real, F))
     # anotheranother =list(map(np.imag, F))
 
-    # F2dAbs = []
-    #
+    F2dAbs = []
+
     # for i in range(Nu):
     #     row = [j * Fabs[i] for j in Fabs]
     #     F2dAbs.append(row)
-
-    # print(F2dAbs[50][50])
+    #
     # arrayF2dAbs = np.array(F2dAbs)
-    # print(arrayF2dAbs)
-    # x, y = np.meshgrid(u, u)
+    # z, y = np.meshgrid(u, u)
     #
     # fig = pylab.figure()
     # axes = Axes3D(fig)
-    # axes.plot_surface(x, y, arrayF2dAbs, cmap=plt.cm.jet)
+    # axes.plot_surface(z, y, arrayF2dAbs, cmap=plt.cm.jet)
     # pylab.savefig("plots/pe3d_u(" + str(u_left) + ", " + str(u_right) + ", " + str(Nu) + ")_x(" + str(x_left) + ", " + str(x_right) + ", " + str(Nx) + ")_param( " + str(pe_param) + ").png")
     # pylab.show()
     # print("another done")
     plt.plot(u, Fabs)
     plt.grid()
-    plt.savefig("plots/pe_u(" + str(u_left) + ", " + str(u_right) + ", " + str(Nu) + ")_x(" + str(x_left) + ", " + str(x_right) + ", " + str(Nx) + ")_param(" + str(pe_param) + ").png")
+    plt.legend(['Pearcey output abs: f = ' + str(f) + "; param = " + str(pe_param)])
+    plt.savefig("plots/pe_odd_u(" + str(u_left) + ", " + str(u_right) + ", " + str(Nu) + ")_x(" + str(x_left) + ", " + str(x_right) + ", " + str(Nx) + ")_param(" + str(pe_param) + ").png")
     plt.show()
 
-    # plt.plot(u, another)
-    # plt.grid()
-    # plt.show()
-    # plt.plot(u, anotheranother)
-    # plt.grid()
-    # plt.show()
 
 
 def halfPearcey():
@@ -281,17 +333,17 @@ def halfPearcey():
 def Airy():
     a = 3
     b = 1
-    Nx = 2001
+    Nx = 2501
     Nu = 2001
-    u_left = -0.1
-    u_right = 15
-    x_left = -4
-    x_right = 4
-
+    u_left = -.1
+    u_right = 3
+    x_left = -2
+    x_right = 2
+    f = 1000
     x = np.linspace(x_left, x_right, Nx)
     F = [0] * Nu
     u = np.linspace(u_left, u_right, Nu)
-    k = 2*np.pi/(0.000633*1000)
+    k = 2*np.pi/(0.000633*f)
 
     # print(x)
 
@@ -324,21 +376,21 @@ def Airy():
         F2dAbs.append(row)
 
     # print(F2dAbs[50][50])
-    # arrayF2dAbs = np.array(F2dAbs)
-    # print(arrayF2dAbs)
-    # x, y = np.meshgrid(u, u)
-    #
-    # fig = pylab.figure()
-    # axes = Axes3D(fig)
-    # axes.plot_surface(x, y, arrayF2dAbs, cmap=plt.cm.jet)
-    # pylab.savefig("plots/ai2d_u(" + str(u_left) + ", " + str(u_right) + ", " + str(Nu) + ")_x(" + str(x_left) + ", " + str(x_right) + ", " + str(Nx) + ")_param(" + str(Aiparam) + ").png")
-    # pylab.show()
-    print("another done")
-    plt.plot(u, Fabs, u, G)
-    plt.grid()
-    plt.legend(['Numeric', 'mp.quad'])
-    plt.savefig("plots/ai_u(" + str(u_left) + ", " + str(u_right) + ", " + str(Nu) + ")_x(" + str(x_left) + ", " + str(x_right) + ", " + str(Nx) + ").png")
-    plt.show()
+    arrayF2dAbs = np.array(F2dAbs)
+    print(arrayF2dAbs)
+    x, y = np.meshgrid(u, u)
+
+    fig = pylab.figure()
+    axes = Axes3D(fig)
+    axes.plot_surface(x, y, arrayF2dAbs, cmap=plt.cm.jet)
+    pylab.savefig("plots/ai2d_u(" + str(u_left) + ", " + str(u_right) + ", " + str(Nu) + ")_x(" + str(x_left) + ", " + str(x_right) + ", " + str(Nx) + ")_param(" + str(Aiparam) + ").png")
+    pylab.show()
+    # print("another done")
+    # plt.plot(u, Fabs)
+    # plt.grid()
+    # plt.legend(['Airy output abs: f = ' + str(f) + "; param = " + str(Aiparam)])
+    # plt.savefig("plots/ai_u(" + str(u_left) + ", " + str(u_right) + ", " + str(Nu) + ")_x(" + str(x_left) + ", " + str(x_right) + ", " + str(Nx) + "param(" + str(Aiparam) + ")_f(" + str(f) + ").png")
+    # plt.show()
 
 def InitialAiryPhaze():
     x = np.linspace(-2, 2, 400)
@@ -397,18 +449,18 @@ def anotherintegrate():
 def fresnel():
     a = 3
     b = 1
-    Nx = 3001
-    Nu = 1501
-    u_left = -5
-    u_right = 5
-    x_left = -6
-    x_right = 6
+    Nx = 5001
+    Nu = 1001
+    u_left = -7
+    u_right = 7
+    x_left = -5
+    x_right = 5
 
     x = np.linspace(x_left, x_right, Nx)
     F = [0] * Nu
     u = np.linspace(u_left, u_right, Nu)
     k = 2 * np.pi / (0.000633)
-    z = 650
+    z = 2600
 
     # print(x)
 
@@ -450,6 +502,60 @@ def fresnel():
     plt.savefig("plots/fresnel_pe_u(" + str(u_left) + ", " + str(u_right) + ", " + str(Nu) + ")_x(" + str(x_left) + ", " + str(x_right) + ", " + str(Nx) + ")_param(" + str(pe_param) + ")_z(" + str(z) + ").png")
     plt.show()
 
+def fresnel_four():
+    a = 3
+    b = 1
+    Nx = 3001
+    Nu = 1501
+    u_left = -6
+    u_right = 1
+    x_left = -3
+    x_right = 3
+
+    x = np.linspace(x_left, x_right, Nx)
+    F = [0] * Nu
+    u = np.linspace(u_left, u_right, Nu)
+    k = 2 * np.pi / (0.000633)
+    z = 400
+    f = 650
+    # print(x)
+
+    # print(u)
+    a = (1.777514461805397 - 1.777514461805397j)
+    start = time.clock()
+    Fmid = [0] * (Nx - 1)
+    for i in range(Nx - 1):
+        Fmid[i] = Ai((x[i] + x[i + 1]) / 2) * (x[i + 1] - x[i])
+    for n in range(Nu):
+        F[n] = 0
+        for i in range(Nx - 1):
+            F[n] += Fmid[i] * np.exp((1j * k / (2 * z)) * (x[i] + x[i + 1]) / 2 * u[n] + 1j * (k / 2) * (1/z - 1/f) * ((x[i] + x[i + 1]) / 2)**2) # сейчас в формуле в экспоненте стоит -I, чтобы было похоже на результат Фурье
+        F[n] *= np.exp(1j * (k / 2*z) * u[n]**2)
+        # F[n] *=
+        # print(F[j])
+    F = list(map(lambda x: x * np.exp(1j * k * z) * np.sqrt(1j * k / (2 * np.pi * z)), F))
+    print(np.sqrt(-1j * k / (2 * np.pi * z)))
+    print('a')
+    # F = np.fft.fftshift(F)
+    # G = [0] * Nu
+    # mp.dps = 50
+    # for i in range(Nu):
+    #     G[i] = Float(abs(mp.quad(lambda x: Ai(x) * cmath.exp(-I * k * x * u[i]), [-1, 3])), 35)
+    #     print(G[i])
+
+    # print(F)
+    # print("airy")
+    # print(k, F[0], u[0])
+    Fabs = list(map(abs, F))
+    end = time.clock()
+    print('time:' + str(end - start))
+    plt.plot(u, Fabs)
+    plt.grid()
+    plt.savefig(
+        "plots/fresnel_four_ai_u(" + str(u_left) + ", " + str(u_right) + ", " + str(Nu) + ")_x(" + str(x_left) + ", " + str(
+            x_right) + ", " + str(Nx) + ")_param(" + str(pe_param) + ")_z(" + str(z) + ")_f(" + str(f) + ").png")
+    plt.show()
+
 def scipyfresnel():
     x = np.linspace(-30, 5, 1001)
     # x1 = list(map(abs, x))
@@ -473,8 +579,11 @@ def scipyfresnel():
 # quadint()
 # a()
 # anotherintegrate()
-# fresnel()
+fresnel()
 # scipyfresnel()
 # getInitPe2d()
+# getInitAi2d()
 # Fourier2d()
-halfPearcey()
+# halfPearcey()
+# fresnel_four()
+# plotPhasetAi2d()
