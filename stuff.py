@@ -35,14 +35,30 @@ def PeOdd(x):
     else:
         return np.exp(1j * -(x ** 4) + pe_param * 1j * -(x ** 2))
 
-Aiparam = 15
+def PeOdd2d(x, y):
+    if((x >= 0) & (y >= 0)):
+        return np.exp(1j * (x ** 4) + pe_param * 1j * (x ** 2) + 1j * (y ** 4) + pe_param * 1j * (y ** 2))
+    elif((x >= 0) & (y < 0)):
+        return np.exp(1j * (x ** 4) + pe_param * 1j * (x ** 2) + 1j * -(y ** 4) + pe_param * 1j * -(y ** 2))
+    elif ((x < 0) & (y > 0)):
+        return np.exp(1j * -(x ** 4) + pe_param * 1j * -(x ** 2) + 1j * (y ** 4) + pe_param * 1j * (y ** 2))
+    else:
+        return np.exp(1j * -(x ** 4) + pe_param * 1j * -(x ** 2) + 1j * -(y ** 4) + pe_param * 1j * -(y ** 2))
+
+Aiparam = 30
 
 sigma = 0.1
 def Gauss(x):
     return np.exp(-x**2/sigma**2)
 
 def Ai(x):
-    return np.exp(1j * Aiparam * (x ** 3))
+    return np.exp(-1j * Aiparam * (x ** 3)/3)
+
+def AiEven(x):
+    return np.exp(-1j * Aiparam * (abs(x) ** 3)/3)
+
+def AiEven2d(x, y):
+    return np.exp(1j * Aiparam * (abs(x) ** 3)/3 + 1j * Aiparam * (abs(y) ** 3)/3)
 
 def AiI(x):
     return cmath.exp(I * Aiparam * (x ** 3) + I*x)
@@ -88,6 +104,15 @@ def getInitPe2d():
     # axes.plot_surface(x, y, Fphase, cmap=plt.cm.jet)
     # pylab.show()
 
+
+def plotPePhase():
+    a = np.linspace(-2, 2, 100)
+    Fabs = list(map(lambda x: np.angle(PeOdd(x)).real, a))
+    plt.plot(a, Fabs)
+    plt.grid()
+    plt.show()
+
+
 def getInitAi2d():
     xright = 2
     xleft = -2
@@ -122,6 +147,91 @@ def getInitAi2d():
 
     Fphase = np.array(Fphase)
     return Fphase, xmid, ymid
+
+def getInitPeOdd2d():
+    xright = 2
+    xleft = -2
+    yright = 2
+    yleft = -2
+    nx = 501
+    ny = 501
+    x = np.linspace(xleft, xright, nx)
+    y = np.linspace(yleft, yright, ny)
+    xstep = abs(x[1] - x[0])
+    ystep = abs(y[1] - y[0])
+    xmid = []
+    ymid = []
+    for i in range(nx - 1):
+        xmid.append((x[i + 1] + x[i]) / 2)
+        ymid.append((y[i + 1] + y[i]) / 2)
+    xmid = np.array(xmid)
+    ymid = np.array(ymid)
+    Fphase = []
+    for i in range(len(xmid)):
+        xarr = []
+        for j in range(len(ymid)):
+            xarr.append(PeOdd2d(x[i], y[j]) * xstep * ystep)
+        Fphase.append(xarr)
+
+    for i in range(nx - 1):
+        for j in range(ny - 1):
+            a = Fphase[i][j]
+            a = np.angle(a).real
+            Fphase[i][j] = a
+    Fphase = np.array(Fphase)
+
+    x, y = np.meshgrid(x[0:nx - 1:1], y[0:ny - 1:1])
+    a = 1
+    Fphase = np.array(Fphase)
+    fig = plt.figure()
+    ax = fig.gca(projection='3d', proj_type='ortho')
+    # ax.set_xlabel('X')
+    ax.plot_surface(x, y, Fphase, cmap=plt.cm.binary, antialiased=False)
+    pylab.show()
+
+def getInitAiEven2d():
+    xright = 2
+    xleft = -2
+    yright = 2
+    yleft = -2
+    nx = 501
+    ny = 501
+    x = np.linspace(xleft, xright, nx)
+    y = np.linspace(yleft, yright, ny)
+    xstep = abs(x[1] - x[0])
+    ystep = abs(y[1] - y[0])
+    xmid = []
+    ymid = []
+    for i in range(nx - 1):
+        xmid.append((x[i + 1] + x[i]) / 2)
+        ymid.append((y[i + 1] + y[i]) / 2)
+    xmid = np.array(xmid)
+    ymid = np.array(ymid)
+    Fphase = []
+    for i in range(len(xmid)):
+        xarr = []
+        for j in range(len(ymid)):
+            xarr.append(AiEven2d(x[i], y[j]) * xstep * ystep)
+        Fphase.append(xarr)
+
+    for i in range(nx - 1):
+        for j in range(ny - 1):
+            a = Fphase[i][j]
+            a = np.angle(a).real
+            Fphase[i][j] = a
+    Fphase = np.array(Fphase)
+
+    x, y = np.meshgrid(x[0:nx - 1:1], y[0:ny - 1:1])
+    a = 1
+    Fphase = np.array(Fphase)
+    # fig = pylab.figure()
+    # axes = Axes3D(fig)
+    # axes.plot_surface(x, y, Fphase, cmap=plt.cm.binary)
+    # pylab.show()
+    fig = plt.figure()
+    ax = fig.gca(projection='3d', proj_type='ortho')
+    ax.plot_surface(x, y, Fphase, cmap=plt.cm.binary, antialiased=False)
+    pylab.show()
 
 
 def plotPhasetAi2d():
@@ -244,8 +354,8 @@ def Pearcey():
     b = 2
     Nx = 10001
     Nu = 2001
-    u_left = -5
-    u_right = 5
+    u_left = -1
+    u_right = 10
     x_left = -7
     x_right = 7
     # zeros = np.zeros(2000)
@@ -258,7 +368,7 @@ def Pearcey():
     start = time.clock()
     Fmid = [0] * (Nx - 1)
     for i in range(Nx - 1):
-        Fmid[i] = Pe((x[i] + x[i + 1]) / 2) * (x[i + 1] - x[i])
+        Fmid[i] = PeOdd((x[i] + x[i + 1]) / 2) * (x[i + 1] - x[i])
     for j in range(Nu):
         F[j] = 0
         for i in range(Nx - 1):
@@ -296,33 +406,40 @@ def Pearcey():
 
 
 def halfPearcey():
-    Nx = 7001
-    Nu = 4001
+    Nx = 8001
+    Nu = 2001
     u_left = -4
     u_right = 5
-    x_left = 0
-    x_right = 10
+    x_left = -5
+    x_right = 5
     x = np.linspace(x_left, x_right, Nx)
     F = [0] * Nu
     u = np.linspace(u_left, u_right, Nu)
-    k = 2 * np.pi / (0.000633 * 1000)
-    z = 0
+    # k = 2 * np.pi / (0.000633)
+    z = 0.95
     xo = 1
     zc = 1
-    l = 0.000532
-    # k = 2*np.pi/( l )
+    l = 0.6
+    k = 2*np.pi/( l )
     #
     x0 = l
-    # zc = (2 * k * x0 ** 2)
+    zc = (2 * k * l ** 2)
     # z = 75*l/8
+    z = (2 * k * l ** 2)*0.9
+
+    # for j in range(Nu):
+    #     F[j] = 0
+    #     for i in range(Nx - 1):
+    #         F[j] +=  np.exp((1j * ((x[i] + x[i + 1])/2)**2 * u[j]/x0) + 1j*(1 - z/zc)*((x[i] + x[i + 1])/2)**4)*((x[i+1]) - x[i])
 
     for j in range(Nu):
         F[j] = 0
         for i in range(Nx - 1):
-            F[j] +=  np.exp((1j * ((x[i] + x[i + 1])/2)**2 * u[j]/x0) + 1j*(1 - z/zc)*((x[i] + x[i + 1])/2)**4)*((x[i+1]) - x[i])
-            # F[j] = F[j] * (x_right-x_left) / (Nx)
+            F[j] +=  np.exp((1j * ((x[i] + x[i + 1])/2)**2 * u[j]/(x0*(1- z/zc)**(1/2))) + 1j*((x[i] + x[i + 1])/2)**4)*((x[i+1]) - x[i])
+
+    # F[j] = F[j] * (x_right-x_left) / (Nx)
     print("done")
-    F = list(map(lambda x: x * (x_right - x_left) / (Nx), F))
+    F = list(map(lambda x: x /((1 - z/zc)**(1/4)), F))
     Fabs = list(map(abs, F))
     plt.plot(u, Fabs)
     plt.grid()
@@ -339,7 +456,7 @@ def Airy():
     u_right = 3
     x_left = -2
     x_right = 2
-    f = 1000
+    f = 200
     x = np.linspace(x_left, x_right, Nx)
     F = [0] * Nu
     u = np.linspace(u_left, u_right, Nu)
@@ -354,6 +471,8 @@ def Airy():
         for i in range(Nx - 1):
             F[j] += Ai((x[i] + x[i + 1]) / 2) * np.exp((-1j * k * ((x[i] + x[i + 1])) * u[j])/2) * (x[i + 1] - x[i])#сейчас в формуле в экспоненте стоит -I, чтобы было похоже на результат Фурье
 
+
+    # F = list(map(lambda x: np.sqrt(k)*x, F))
     G = [0]*Nu
     # mp.dps = 50
     # for i in range(Nu):
@@ -369,28 +488,28 @@ def Airy():
     Fabs = list(map(abs, F))
     # print(Fabs)
 
-    F2dAbs = []
-
-    for i in range(Nu):
-        row = [j * Fabs[i] for j in Fabs]
-        F2dAbs.append(row)
-
-    # print(F2dAbs[50][50])
-    arrayF2dAbs = np.array(F2dAbs)
-    print(arrayF2dAbs)
-    x, y = np.meshgrid(u, u)
-
-    fig = pylab.figure()
-    axes = Axes3D(fig)
-    axes.plot_surface(x, y, arrayF2dAbs, cmap=plt.cm.jet)
-    pylab.savefig("plots/ai2d_u(" + str(u_left) + ", " + str(u_right) + ", " + str(Nu) + ")_x(" + str(x_left) + ", " + str(x_right) + ", " + str(Nx) + ")_param(" + str(Aiparam) + ").png")
-    pylab.show()
+    # F2dAbs = []
+    #
+    # for i in range(Nu):
+    #     row = [j * Fabs[i] for j in Fabs]
+    #     F2dAbs.append(row)
+    #
+    # # print(F2dAbs[50][50])
+    # arrayF2dAbs = np.array(F2dAbs)
+    # print(arrayF2dAbs)
+    # x, y = np.meshgrid(u, u)
+    #
+    # fig = pylab.figure()
+    # axes = Axes3D(fig)
+    # axes.plot_surface(x, y, arrayF2dAbs, cmap=plt.cm.jet)
+    # pylab.savefig("plots/ai2d_u(" + str(u_left) + ", " + str(u_right) + ", " + str(Nu) + ")_x(" + str(x_left) + ", " + str(x_right) + ", " + str(Nx) + ")_param(" + str(Aiparam) + ").png")
+    # pylab.show()
     # print("another done")
-    # plt.plot(u, Fabs)
-    # plt.grid()
-    # plt.legend(['Airy output abs: f = ' + str(f) + "; param = " + str(Aiparam)])
-    # plt.savefig("plots/ai_u(" + str(u_left) + ", " + str(u_right) + ", " + str(Nu) + ")_x(" + str(x_left) + ", " + str(x_right) + ", " + str(Nx) + "param(" + str(Aiparam) + ")_f(" + str(f) + ").png")
-    # plt.show()
+    plt.plot(u, Fabs)
+    plt.grid()
+    plt.legend(['Airy output abs: f = ' + str(f) + "; param = " + str(Aiparam)])
+    plt.savefig("plots/ai_u(" + str(u_left) + ", " + str(u_right) + ", " + str(Nu) + ")_x(" + str(x_left) + ", " + str(x_right) + ", " + str(Nx) + "param(" + str(Aiparam) + ")_f(" + str(f) + ").png")
+    plt.show()
 
 def InitialAiryPhaze():
     x = np.linspace(-2, 2, 400)
@@ -400,123 +519,99 @@ def InitialAiryPhaze():
     plt.grid()
     plt.show()
 
-def quadint():
-    Nx = 101
-    Nu = 101
-    x = np.linspace(-2, 2, Nx)
-    Fr = [0] * Nu
-    Fi = [0] * Nu
-    F = [0] * Nu
-    u = np.linspace(-0.1, 4, Nu)
-    k = 2 * np.pi / (0.000633 * 1000)
-    output = 0
 
-
-    def Peforquad(x, u, k):
-        return (Ai(x) * cmath.exp((I * k * (x) * u)))
-    def Peforquadreal(x, u, k):
-        return scipy.real(Ai(x) * cmath.exp((I * k * (x) * u)))
-    def Peforquadim(x, u, k):
-        return scipy.imag(Ai(x) * cmath.exp((I * k * (x) * u)))
-
-    whole = Peforquad(x[90], u[90], 9)
-    real = Peforquadreal(x[90], u[90], 9)
-    imag = Peforquadim(x[90], u[90], 9)
-    print(scipy.integrate.quad(Peforquadreal, 0, 1, args=(1, 9))[0])
-    print(scipy.integrate.quad(Peforquadim, 0, 1, args=(1, 9))[0])
-
-def anotherintegrate():
-    Nx = 101
-    Nu = 501
-    x = np.linspace(-2, 2, Nx)
-    Fr = [0] * Nu
-    Fi = [0] * Nu
-    F = [0] * Nu
-    mp.dps = 70
-    u = np.linspace(-0.1, 4, Nu)
-    k = 2 * np.pi / (0.000633 * 1000)
-    for i in range(Nu):
-        F[i] = Float(abs(mp.quad(lambda x: Ai(x)*cmath.exp(-I*9.92*x*u[i]), [-1, 3])), 50)
-        print(F[i])
-    print(F)
-
-    # Fabs = list(map(abs, F))
-    plt.plot(u, F)
-    plt.grid()
-    plt.show()
-
-
-def fresnel():
+def fresnel(z, Nx, Nu, x_right, x_left, u_right, u_left):
     a = 3
     b = 1
-    Nx = 5001
-    Nu = 1001
-    u_left = -7
-    u_right = 7
-    x_left = -5
-    x_right = 5
+    # Nx = 2001
+    # Nu = 1001
+    # u_left = -5
+    # u_right = 5
+    # x_left = -4
+    # x_right = 4
 
     x = np.linspace(x_left, x_right, Nx)
     F = [0] * Nu
     u = np.linspace(u_left, u_right, Nu)
     k = 2 * np.pi / (0.000633)
-    z = 2600
-
-    # print(x)
-
-    # print(u)
-    a = (1.777514461805397-1.777514461805397j)
+    # z = 800
     start = time.clock()
     Fmid = [0]*(Nx-1)
     for i in range(Nx - 1):
-        Fmid[i] = Pe((x[i] + x[i + 1]) / 2)* (x[i + 1] - x[i])
+        Fmid[i] = Ai((x[i] + x[i + 1]) / 2)* (x[i + 1] - x[i])
     for n in range(Nu):
         F[n] = 0
         for i in range(Nx - 1):
-            F[n] += Fmid[i] * np.exp((1j * k /(2*z))* ((x[i] + x[i + 1])/2 - u[n])**2)   # сейчас в формуле в экспоненте стоит -I, чтобы было похоже на результат Фурье
-
-        # F[n] *=
-            # print(F[j])
-    F = list(map(lambda x: x*np.exp(1j * k * z) * np.sqrt(1j * k / (2 * np.pi * z)), F))
+            F[n] += Fmid[i] * np.exp((1j * k /(2*z))*
+                                     ((x[i] + x[i + 1])/2 - u[n])**2)   # сейчас в формуле в экспоненте стоит -I, чтобы было похоже на результат Фурье
+    F = list(map(lambda x: x*np.exp(1j * k * z) * np.sqrt(-1j * k / (2 * np.pi * z)), F))
     print(np.sqrt(-1j * k / (2 * np.pi * z)))
     print('a')
-    # F = np.fft.fftshift(F)
-    # G = [0] * Nu
-    # mp.dps = 50
-    # for i in range(Nu):
-    #     G[i] = Float(abs(mp.quad(lambda x: Ai(x) * cmath.exp(-I * k * x * u[i]), [-1, 3])), 35)
-    #     print(G[i])
 
-    # print(F)
-    # print("airy")
-    # print(k, F[0], u[0])
-    Fabs = list(map(abs, F))
+    Fabs = list(map(lambda x: abs(x)**2, F))
     end = time.clock()
-    oldtime = "time:193.04681520659014"
-    secondtime = "time:97.04681520659014"
-    thirdtime = "105"
+
     print('time:' + str(end-start))
-    # print(Fabs)
-    plt.plot(u, Fabs)
-    plt.grid()
-    plt.savefig("plots/fresnel_pe_u(" + str(u_left) + ", " + str(u_right) + ", " + str(Nu) + ")_x(" + str(x_left) + ", " + str(x_right) + ", " + str(Nx) + ")_param(" + str(pe_param) + ")_z(" + str(z) + ").png")
-    plt.show()
+
+
+    # plt.plot(u, Fabs)
+    # plt.grid()
+    # plt.savefig("plots/fresnel_pe_u(" + str(u_left) + ", " + str(u_right) + ", " + str(Nu) + ")_x(" + str(x_left) + ", " + str(x_right) + ", " + str(Nx) + ")_param(" + str(pe_param) + ")_z(" + str(z) + ").png")
+    # plt.show()
+    return Fabs
+
+
+def acceleration():
+    Nx = 2001
+    Nu = 401
+    u_left = -4
+    u_right = 4
+    x_left = -4
+    x_right = 4
+    u = np.linspace(u_left, u_right, Nu)
+
+    z_quan = 30
+    repeat_time = 40
+    z_0 = 400
+    z_step = 40
+    v = np.linspace(z_0, z_0+z_step*z_quan-1, z_quan*repeat_time)
+    output = []
+    start = time.time()
+    for i in range(z_quan):
+        outputLine = fresnel(i*z_step+z_0, Nx, Nu, x_right, x_left, u_right, u_left)
+        for j in range(repeat_time):
+            output.append(outputLine)
+
+    output = np.array(output)
+    end = time.time()
+    print('acc time: ' + str(end-start))
+    u, v = np.meshgrid(u, v)
+    # fig = plt.figure()
+    # axes = Axes3D(fig)
+    fig = plt.figure()
+    ax = fig.gca(projection='3d', proj_type = 'ortho')
+    ax.view_init(100, 100)
+    # axes = fig.add_subplot(122, projection='3d')
+    ax.plot_surface(u, v, output, cmap=plt.cm.binary,antialiased=False)
+    pylab.show()
+
+
 
 def fresnel_four():
     a = 3
     b = 1
     Nx = 3001
     Nu = 1501
-    u_left = -6
-    u_right = 1
-    x_left = -3
-    x_right = 3
+    u_left = -.1
+    u_right = 8
+    x_left = -4
+    x_right = 4
 
     x = np.linspace(x_left, x_right, Nx)
     F = [0] * Nu
     u = np.linspace(u_left, u_right, Nu)
     k = 2 * np.pi / (0.000633)
-    z = 400
+    z = 1200
     f = 650
     # print(x)
 
@@ -529,8 +624,8 @@ def fresnel_four():
     for n in range(Nu):
         F[n] = 0
         for i in range(Nx - 1):
-            F[n] += Fmid[i] * np.exp((1j * k / (2 * z)) * (x[i] + x[i + 1]) / 2 * u[n] + 1j * (k / 2) * (1/z - 1/f) * ((x[i] + x[i + 1]) / 2)**2) # сейчас в формуле в экспоненте стоит -I, чтобы было похоже на результат Фурье
-        F[n] *= np.exp(1j * (k / 2*z) * u[n]**2)
+            F[n] += Fmid[i] * np.exp((-1j * k / (z)) * ((x[i] + x[i + 1]) / 2) * u[n] - 1j * (k / 2) * ((f-z)/(f*z)) * ((x[i] + x[i + 1]) / 2)**2) # сейчас в формуле в экспоненте стоит -I, чтобы было похоже на результат Фурье
+        F[n] *= np.exp(-1j * (k / 2*z) * u[n]**2)
         # F[n] *=
         # print(F[j])
     F = list(map(lambda x: x * np.exp(1j * k * z) * np.sqrt(1j * k / (2 * np.pi * z)), F))
@@ -546,9 +641,26 @@ def fresnel_four():
     # print(F)
     # print("airy")
     # print(k, F[0], u[0])
+    # F2dAbs = []
     Fabs = list(map(abs, F))
-    end = time.clock()
-    print('time:' + str(end - start))
+    # for i in range(Nu):
+    #     row = [j * Fabs[i] for j in Fabs]
+    #     F2dAbs.append(row)
+    #
+    # # print(F2dAbs[50][50])
+    # arrayF2dAbs = np.array(F2dAbs)
+    # print(arrayF2dAbs)
+    # x, y = np.meshgrid(u, u)
+    #
+    # fig = pylab.figure()
+    # axes = Axes3D(fig)
+    # axes.plot_surface(x, y, arrayF2dAbs, cmap=plt.cm.jet)
+    # pylab.savefig("plots/ai2d_u(" + str(u_left) + ", " + str(u_right) + ", " + str(Nu) + ")_x(" + str(x_left) + ", " + str(x_right) + ", " + str(Nx) + ")_param(" + str(Aiparam) + ").png")
+    # pylab.show()
+
+
+    # end = time.clock()
+    # print('time:' + str(end - start))
     plt.plot(u, Fabs)
     plt.grid()
     plt.savefig(
@@ -570,6 +682,19 @@ def scipyfresnel():
     plt.grid()
     plt.show()
 
+
+def fastfour():
+    x = np.linspace(-5, 5, 200)
+    a = [1, 2, 3, 4]
+    print(np.fft.fftshift(a))
+    f = list(map(lambda a: np.exp(-a**2), x))
+    F = np.fft.fft(f)
+    F = np.fft.fftshift(F)
+    plt.plot(x, F)
+    plt.grid()
+    plt.show()
+
+
 # plotSmthn()
 # Pearcey()
 # Airy()
@@ -579,7 +704,7 @@ def scipyfresnel():
 # quadint()
 # a()
 # anotherintegrate()
-fresnel()
+# fresnel()
 # scipyfresnel()
 # getInitPe2d()
 # getInitAi2d()
@@ -587,3 +712,15 @@ fresnel()
 # halfPearcey()
 # fresnel_four()
 # plotPhasetAi2d()
+# fastfour()
+# acceleration()
+getInitPeOdd2d()
+# plotPePhase()
+# getInitAiEven2d()
+# Nx = 2001
+# Nu = 401
+# u_left = -4
+# u_right = 4
+# x_left = -4
+# x_right = 4
+# fresnel(400, Nx, Nu, x_right, x_left, u_right, u_left)
