@@ -29,3 +29,4 @@ if __name__ == '__main__':
     # utils.fresfour(500, Nx, Nu, x_right, x_left, u_right, u_left, beams.Ai, 500, False)
     utils.accelerationVer2()
     # utils.acceleration()
+    # beams.plotAiPhase()

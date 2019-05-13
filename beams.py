@@ -14,7 +14,7 @@ from functools import reduce
 
 pe_param = 5
 
-Aiparam = 40
+Aiparam = 80
 
 sigma = 0.1
 
@@ -108,6 +108,14 @@ def getInitPe2d():
     # axes.plot_surface(x, y, Fphase, cmap=plt.cm.jet)
     # pylab.show()
 
+
+
+def plotAiPhase():
+    a = np.linspace(-1, 1, 100)
+    Fabs = list(map(lambda x: np.angle(Ai(x)), a))
+    plt.plot(a, Fabs)
+    plt.grid()
+    plt.show()
 
 def plotPePhase():
     a = np.linspace(-2, 2, 100)

@@ -287,17 +287,17 @@ def fresfour(z, Nx, Nu, x_right, x_left, u_right, u_left, func, f, is2d):
 
 
 def accelerationVer2():
-    Nx = 7001
-    Nu = 2001
+    Nx = 1001
+    Nu = 1001
     u_left = -1
-    u_right = 7
-    x_left = -8
-    x_right = 8
+    u_right = 5
+    x_left = -1
+    x_right = 1
     u = np.linspace(u_left, u_right, Nu)
     x = np.linspace(x_left, x_right, Nx)
-    z_quan = 5
-    z_0 = 750
-    z_step = 20
+    z_quan = 4
+    z_0 = 100
+    z_step = 100
     v = np.linspace(z_0, z_0 + z_step * (z_quan - 1), z_quan)
     output = []
     start = time.time()
@@ -331,7 +331,7 @@ def fresnel_four(z, Nx, Nu, x, u, Fmid):
     F = [0] * Nu
 
     k = 2 * np.pi / (0.000633)
-    f = 800
+    f = 100
     start = time.clock()
     new_x = []
     for i in range(Nx - 1):
