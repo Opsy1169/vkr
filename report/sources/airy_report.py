@@ -1,0 +1,22 @@
+def Ai(x):
+    		return cmath.exp(I * Aiparam * (x ** 3))
+
+def PlotInitialAiry(a, b, n):
+    		x = np.linspace(a, b, n)
+    		airyinit = list(map(Ai, x))
+    		airyinitphase = list(map(cmath.phase, airyinit))
+		airyinitabs = list(map(abs, airyinit))
+		airyinitreal = list(map(numpy.real, airyinit))
+		airyinitimag = list(map(numpy.imag, airyinit))
+    		plt.plot(x, airyinitphase)
+    		plt.grid()
+    		plt.show()
+		plt.plot(x, airyinitabs)
+    		plt.grid()
+    		plt.show()
+		plt.plot(x, airyinitreal)
+    		plt.grid()
+    		plt.show()
+		plt.plot(x, airyinitimag)
+    		plt.grid()
+    		plt.show()
