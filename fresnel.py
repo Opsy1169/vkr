@@ -12,6 +12,7 @@ import mpmath as mp
 import time
 from functools import reduce
 
+import beams
 
 
 def shit():
