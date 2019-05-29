@@ -24,12 +24,17 @@ def fourierArr(Nx, x_right, x_left, f, u, func):
     for i in range(Nx - 1):
         Fmid[i] = func((x[i] + x[i + 1]) / 2) * (x[i + 1] - x[i])
     output = []
+    temp = -1j*k/2
+    multiplier = (x_right - x_left) / (Nx)
     for j in range(len(u)):
         val = 0
+        u_j = u[j]
         for i in range(Nx - 1):
-            val += Fmid[i] * np.exp((-1j * k * (x[i] + x[i + 1]) * u[j]) / 2)
+            val += Fmid[i] * np.exp((temp * (x[i] + x[i + 1]) * u_j))
             # F[j] = F[j] * (x_right-x_left) / (Nx)
-        output.append(val * (x_right - x_left) / (Nx))
+        output.append(val * multiplier)
+    Fabs = list(map(abs, output))
+    plt.plot(u, Fabs)
     return np.array(output)
 
 
@@ -42,8 +47,9 @@ def fourierDot(Nx, x_right, x_left, f, u, func):
     for i in range(Nx - 1):
         Fmid[i] = func((x[i] + x[i + 1]) / 2) * (x[i + 1] - x[i])
     output = 0
+    temp = -1j * k / 2
     for i in range(Nx - 1):
-        output += Fmid[i] * np.exp((-1j * k * (x[i] + x[i + 1]) * u) / 2)
+        output += Fmid[i] * np.exp( temp* (x[i] + x[i + 1]) * u)
         # F[j] = F[j] * (x_right-x_left) / (Nx)
     output = output * (x_right - x_left) / (Nx)
     return output
@@ -58,10 +64,12 @@ def Fourier(Nx, Nu, u_left, u_right, x_left, x_right, f, is2d, func):
     Fmid = [0] * (Nx - 1)
     for i in range(Nx - 1):
         Fmid[i] = func((x[i] + x[i + 1]) / 2) * (x[i + 1] - x[i])
+
+    temp = -1j * k / 2
     for j in range(Nu):
         F[j] = 0
         for i in range(Nx - 1):
-            F[j] += Fmid[i] * np.exp((-1j * k * (x[i] + x[i + 1]) * u[j]) / 2)
+            F[j] += Fmid[i] * np.exp((temp * (x[i] + x[i + 1]) * u[j]))
         # F[j] = F[j] * (x_right-x_left) / (Nx)
     F = list(map(lambda x: x * (x_right - x_left) / (Nx), F))
     Fabs = list(map(abs, F))

@@ -129,17 +129,17 @@ def InitialAiryPhaze():
 
 
 def acceleration():
-    Nx = 60001
-    Nu = 601
+    Nx = 3001
+    Nu = 1001
     u_left = -6
     u_right = 6
-    x_left = -9
-    x_right = 9
+    x_left = -2
+    x_right = 2
     u = np.linspace(u_left, u_right, Nu)
 
     z_quan = 4
     repeat_time = 40
-    z_0 = 30
+    z_0 = 100
     z_step = 10
     v = np.linspace(z_0, z_0 + z_step * (z_quan - 1), z_quan)
     output = []
@@ -168,29 +168,29 @@ def acceleration():
 
 
 def accelerationVer3():
-    Nx = 2001
-    Nu = 7001
+    Nx = 3001
+    Nu = 5001
     u_left = -1
-    u_right = 7
-    x_left = -6
-    x_right = 6
+    u_right = 9
+    x_left = -4
+    x_right = 4
     u = np.linspace(u_left, u_right, Nu)
 
 
-    z_quan = 2
-    z_0 = 40
-    z_step = 1000
+    z_quan = 1
+    z_0 = 400
+    z_step = 40
     v = np.linspace(z_0, z_0 + z_step * (z_quan - 1), z_quan)
 
 
-    out_u = np.linspace(1.1 * u_left, 1.1 * u_right,  Nu)
+    out_u = np.linspace(u_left, u_right,  Nu)
     output = []
     start = time.time()
     func = beams.Ai
     new_u = []
     for i in range(Nu - 1):
         new_u.append((u[i + 1] + u[i]) / 2)
-    Ffour = fourier.fourierArr(Nx, x_right, x_left, 1000, new_u, func)
+    Ffour = fourier.fourierArr(Nx, x_right, x_left, 300, new_u, func)
     Fabs = list(map(lambda x: abs(x), Ffour))
     plt.plot(new_u, Fabs)
     plt.xlabel('x, mm')
@@ -287,22 +287,22 @@ def fresfour(z, Nx, Nu, x_right, x_left, u_right, u_left, func, f, is2d):
 
 
 def accelerationVer2():
-    Nx = 1001
+    Nx = 2001
     Nu = 1001
-    u_left = -1
-    u_right = 5
+    u_left = -3
+    u_right = 3
     x_left = -1
     x_right = 1
     u = np.linspace(u_left, u_right, Nu)
     x = np.linspace(x_left, x_right, Nx)
-    z_quan = 4
+    z_quan = 10
     z_0 = 100
-    z_step = 100
+    z_step = 20
     v = np.linspace(z_0, z_0 + z_step * (z_quan - 1), z_quan)
     output = []
     start = time.time()
     Fmid = [0] * (Nx - 1)
-    func = beams.Ai
+    func = beams.PeOdd
     for i in range(Nx - 1):
         Fmid[i] = func((x[i] + x[i + 1]) / 2) * (x[i + 1] - x[i])
     for i in range(z_quan):
@@ -331,7 +331,7 @@ def fresnel_four(z, Nx, Nu, x, u, Fmid):
     F = [0] * Nu
 
     k = 2 * np.pi / (0.000633)
-    f = 100
+    f = 150
     start = time.clock()
     new_x = []
     for i in range(Nx - 1):
@@ -350,7 +350,9 @@ def fresnel_four(z, Nx, Nu, x, u, Fmid):
     Fabs = list(map(abs, F))
     end = time.clock()
     print('time:' + str(end - start))
+
     plt.plot(u, Fabs)
+    # plt.show()
     return Fabs
     # plt.plot(u, Fabs)
     # plt.grid()
@@ -361,3 +363,70 @@ def fresnel_four(z, Nx, Nu, x, u, Fmid):
     # plt.show()
 
 
+def normalizeArray(arr):
+    max = np.max(arr)
+    arr /= max
+    return arr
+
+
+def beamsForDifferentFocus(f, func):
+    Nx = 3001
+    Nu = 1501
+    u_left = -4
+    u_right = 4
+    x_left = -2
+    x_right = 2
+    u = np.linspace(u_left, u_right, Nu)
+    x = np.linspace(x_left, x_right, Nx)
+    leg = []
+    for i in range(len(f)):
+        a = fourier.fourierArr(Nx, x_right, x_left, f[i], u, func)
+        # plt.plot(a, u)
+        leg.append('f = ' + str(f[i]) + ', mm')
+    plt.legend(leg)
+    plt.show()
+
+def beamsForDifferentParam(params, func):
+    Nx = 5001
+    Nu = 1501
+    u_left = -1
+    u_right = 6
+    x_left = -2
+    x_right = 2
+    f = 1000
+    u = np.linspace(u_left, u_right, Nu)
+    x = np.linspace(x_left, x_right, Nx)
+    leg = []
+    print(func == beams.Ai)
+    isAi = True if(func == beams.Ai) else False
+    print(isAi)
+    for i in range(len(params)):
+        if(isAi):
+            beams.setAiParam(params[i])
+            print(beams.getAiParam())
+        else:
+            beams.setPeParam(params[i])
+            print(beams.getPeParam())
+        a = fourier.fourierArr(Nx, x_right, x_left, f, u, func)
+        # plt.plot(a, u)
+        leg.append('alpha = ' + str(params[i]))
+    plt.legend(leg)
+    plt.show()
+
+def beamsForDifferentInputRange(rights, lefts, func):
+    Nx = 2001
+    Nu = 1501
+    u_left = -4
+    u_right = 4
+    x_left = -2
+    x_right = 2
+    f = 1000
+    u = np.linspace(u_left, u_right, Nu)
+    x = np.linspace(x_left, x_right, Nx)
+    leg = []
+    for i in range(len(rights)):
+        a = fourier.fourierArr((rights[i]-lefts[i])*800+1, rights[i], lefts[i], f, u, func)
+        # plt.plot(a, u)
+        leg.append('right = ' + str(rights[i]) + "; left = " + str(lefts[i]))
+    plt.legend(leg)
+    plt.show()

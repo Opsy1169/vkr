@@ -12,15 +12,29 @@ import mpmath as mp
 import time
 from functools import reduce
 
-pe_param = 5
 
-Aiparam = 80
+class Params:
+    pe_param = 10
+    Aiparam = 20
+    sigma = 1000
 
-sigma = 0.1
+def setPeParam( param):
+    Params.pe_param = param
+
+def setAiParam( param):
+    Params.Aiparam = param
+
+def getAiParam():
+    return Params.Aiparam
+
+def getPeParam():
+    return Params.pe_param
 
 def Pe(x):
-    return np.exp(1j * (x ** 4) + pe_param * 1j * (x ** 2))
+    return np.exp(1j * (x ** 4) + getPeParam() * 1j * (x ** 2))
 
+def PeGauss(x):
+    return np.exp(x**2/Params.sigma)*np.exp(1j * (x ** 4) + getPeParam() * 1j * (x ** 2))
 
 def Pe_with_param(x, t):
     return np.exp(1j * (x ** 4) + t * 1j * (x ** 2))
@@ -28,41 +42,41 @@ def Pe_with_param(x, t):
 
 def PeOdd(x):
     if (x >= 0):
-        return np.exp(1j * (x ** 4) + pe_param * 1j * (x ** 2))
+        return np.exp(1j * (x ** 4) + getPeParam() * 1j * (x ** 2))
     else:
-        return np.exp(1j * -(x ** 4) + pe_param * 1j * -(x ** 2))
+        return np.exp(1j * -(x ** 4) + getPeParam() * 1j * -(x ** 2))
 
 
 def PeOdd2d(x, y):
     if ((x >= 0) & (y >= 0)):
-        return np.exp(1j * (x ** 4) + pe_param * 1j * (x ** 2) + 1j * (y ** 4) + pe_param * 1j * (y ** 2))
+        return np.exp(1j * (x ** 4) + getPeParam() * 1j * (x ** 2) + 1j * (y ** 4) + getPeParam() * 1j * (y ** 2))
     elif ((x >= 0) & (y < 0)):
-        return np.exp(1j * (x ** 4) + pe_param * 1j * (x ** 2) + 1j * -(y ** 4) + pe_param * 1j * -(y ** 2))
+        return np.exp(1j * (x ** 4) + getPeParam() * 1j * (x ** 2) + 1j * -(y ** 4) + getPeParam() * 1j * -(y ** 2))
     elif ((x < 0) & (y > 0)):
-        return np.exp(1j * -(x ** 4) + pe_param * 1j * -(x ** 2) + 1j * (y ** 4) + pe_param * 1j * (y ** 2))
+        return np.exp(1j * -(x ** 4) + getPeParam() * 1j * -(x ** 2) + 1j * (y ** 4) + getPeParam() * 1j * (y ** 2))
     else:
-        return np.exp(1j * -(x ** 4) + pe_param * 1j * -(x ** 2) + 1j * -(y ** 4) + pe_param * 1j * -(y ** 2))
+        return np.exp(1j * -(x ** 4) + getPeParam() * 1j * -(x ** 2) + 1j * -(y ** 4) + getPeParam() * 1j * -(y ** 2))
 
 
 
 def Gauss(x):
-    return np.exp(-x ** 2 / sigma ** 2)
+    return np.exp(-x ** 2 / Params.sigma ** 2)
 
 
 def Ai(x):
-    return np.exp(1j * Aiparam * (x ** 3) / 3)
+    return np.exp(1j * getAiParam() * (x ** 3) / 3)
 
 
 def AiEven(x):
-    return np.exp(-1j * Aiparam * (abs(x) ** 3) / 3)
+    return np.exp(-1j * getAiParam() * (abs(x) ** 3) / 3)
 
 
 def AiEven2d(x, y):
-    return np.exp(1j * Aiparam * (abs(x) ** 3) / 3 + 1j * Aiparam * (abs(y) ** 3) / 3)
+    return np.exp(1j * getAiParam() * (abs(x) ** 3) / 3 + 1j * getAiParam() * (abs(y) ** 3) / 3)
 
 
 def AiI(x):
-    return cmath.exp(I * Aiparam * (x ** 3) + I * x)
+    return cmath.exp(I * getAiParam() * (x ** 3) + I * x)
 
 
 def Pe2d(x, y):
@@ -70,7 +84,7 @@ def Pe2d(x, y):
 
 
 def Ai2d(x, y):
-    return np.exp(1j * Aiparam * x ** 3 + 1j * Aiparam * y ** 3)
+    return np.exp(1j * getAiParam() * x ** 3 + 1j * getAiParam() * y ** 3)
 
 def getInitPe2d():
     xright = 2
@@ -270,7 +284,7 @@ def plotPhasetAi2d():
     for i in range(len(xmid)):
         xarr = []
         for j in range(len(ymid)):
-            xarr.append(Pe2d(x[i], y[j]) * xstep * ystep)
+            xarr.append(PeOdd2d(x[i], y[j]) * xstep * ystep)
         Fphase.append(xarr)
 
     for i in range(nx - 1):
@@ -284,7 +298,10 @@ def plotPhasetAi2d():
     a = 1
     Fphase = np.array(Fphase)
     fig = pylab.figure()
-    axes = Axes3D(fig)
+    # axes = Axes3D(fig)
+    axes = fig.gca(projection='3d', proj_type='ortho')
+    axes.set_xlabel('x, mm')
+    axes.set_ylabel('y, mm')
     axes.plot_surface(x, y, Fphase, cmap=plt.cm.binary)
     pylab.show()
     # x, y = np.meshgrid(u, u)
