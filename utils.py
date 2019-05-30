@@ -295,14 +295,14 @@ def accelerationVer2():
     x_right = 1
     u = np.linspace(u_left, u_right, Nu)
     x = np.linspace(x_left, x_right, Nx)
-    z_quan = 10
-    z_0 = 100
+    z_quan = 40
+    z_0 = 900
     z_step = 20
     v = np.linspace(z_0, z_0 + z_step * (z_quan - 1), z_quan)
     output = []
     start = time.time()
     Fmid = [0] * (Nx - 1)
-    func = beams.PeOdd
+    func = beams.Pe
     for i in range(Nx - 1):
         Fmid[i] = func((x[i] + x[i + 1]) / 2) * (x[i + 1] - x[i])
     for i in range(z_quan):

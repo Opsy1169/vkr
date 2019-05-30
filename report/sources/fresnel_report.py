@@ -1,5 +1,3 @@
-
-
 def fresnel(z, Nx, Nu, x_right, x_left, u_right, u_left, func):
     maxvals = []
 
@@ -18,7 +16,7 @@ def fresnel(z, Nx, Nu, x_right, x_left, u_right, u_left, func):
         u_n = u[n]
         for i in range(Nx - 1):
             F[n] += Fmid[i] * np.exp(temp * ((x[i] + x[i + 1]) / 2 - u_n) ** 2)
-    F = list(map(lambda x: x * np.exp(1j * k * z) * np.sqrt(-1j * k / (2 * np.pi * z)), F))
+    F = list(map(lambda x: x * np.exp(1j*k*z) * np.sqrt(-1j*k/(2*np.pi*z)), F))
     print(np.sqrt(-1j * k / (2 * np.pi * z)))
     print('a')
 
@@ -82,7 +80,7 @@ def fresnelArr(z, new_u, out_u, Ffour):
         out_u_n = out_u[n]
         for i in range( len(new_u)):
             F[n] += Ffour[i] * np.exp(temp * (new_u[i] - out_u_n) ** 2)
-    F = list(map(lambda x: x * np.exp(1j * k * z) * np.sqrt(-1j * k / (2 * np.pi * z)), F))
+    F = list(map(lambda x: x * np.exp(1j*k*z) * np.sqrt(-1j*k/(2*np.pi * z)), F))
 
     Fabs = list(map(lambda x: abs(x) ** 2, F))
     plt.plot(out_u, Fabs)

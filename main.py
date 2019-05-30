@@ -18,16 +18,16 @@ if __name__ == '__main__':
     # getInitPeOdd2d()
     # plotPePhase()
     # getInitAiEven2d()
-    Nx = 4001
-    Nu = 501
-    u_left = -2
-    u_right = 2
-    x_left = -2
-    x_right = 2
+    Nx = 5001
+    Nu = 2001
+    u_left = -1
+    u_right = 4
+    x_left = -1
+    x_right = 1
     # fourier.Fourier(Nx, Nu, u_left, u_right, x_left, x_right, 1000, False, beams.Pe)
-    # fresnel.fresnel(1200, Nx, Nu, x_right, x_left, u_right, u_left, beams.Pe)
+    # fresnel.fresnel(5000, Nx, Nu, x_right, x_left, u_right, u_left, beams.Pe)
     # fresnel.fresnel(5000, Nx, Nu, x_right, x_left, u_right, u_left, beams.Pe_with_param)
-    # utils.fresfour(500, Nx, Nu, x_right, x_left, u_right, u_left, beams.Ai, 500, False)
+    # utils.fresfour(400, Nx, Nu, x_right, x_left, u_right, u_left, beams.Ai, 500, False)
     # beams.plotPhasetAi2d()
     # utils.beamsForDifferentInputRange([2, 5], [-2, -5], beams.Pe)
     utils.accelerationVer2()

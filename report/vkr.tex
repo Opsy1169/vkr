@@ -1460,6 +1460,12 @@ showstringspaces=false,
     %------------------------------------------------
     \titleformat{\subsection}[block]{\sloppy \bfseries \hspace{1.2cm} }{\thesubsection}{0.5em}{}
     \setlength{\droptitle}{-1cm}
+    \lstset{
+    identifierstyle=\ttfamily,
+    keywordstyle=\ttfamily,
+     showspaces=false, showstringspaces=false,
+    breaklines = false
+    }
     \section*{Приложение А}
     {
     \addcontentsline{toc}{section}{Приложение А Код программы}
@@ -1467,23 +1473,23 @@ showstringspaces=false,
         \textbf{Код программы}
     \end{center}
 
-    \subsection*{\nohyphens{А.1 Модуль, отвечающий за входное распределение пучков \vspace{-0.9cm}}}{
+    \subsection*{\nohyphens{А.1 Модуль, отвечающий за входное распределение пучков }}{
     \addcontentsline{toc}{subsection}{А.1 Модуль, отвечающий за входное распределение пучков}
     \lstinputlisting[language=python,mathescape=true]{sources/beams_report.py}
 
     }
 
-    \subsection*{\nohyphens{ А.2 Модуль, отвечающий за применение преобразования Фурье к данным \vspace{-2.5cm}}}{
+    \subsection*{\nohyphens{ А.2 Модуль, отвечающий за применение преобразования Фурье к данным }}{
     \addcontentsline{toc}{subsection}{А.2 Модуль, отвечающий за применение преобразования Фурье к данным}
     \lstinputlisting[language=python,mathescape=true]{sources/fourier_report.py}
     }
 
-    \subsection*{\nohyphens{А.3 Модуль, отвечающий за применение преобразования Френеля к данным \vspace{-1.8cm}}}{
+    \subsection*{\nohyphens{А.3 Модуль, отвечающий за применение преобразования Френеля к данным }}{
     \addcontentsline{toc}{subsection}{А.3 Модуль, отвечающий за применение преобразования Френеля к данным}
     \lstinputlisting[language=python,mathescape=true]{sources/fresnel_report.py}
     }
 
-    \subsection*{\nohyphens{А.4 Модуль, содержащий в себе вспомогательные функции для моделирования и построения \vspace{-0.9cm}}}{
+    \subsection*{\nohyphens{А.4 Модуль, содержащий в себе вспомогательные функции для моделирования и построения}}{
     \addcontentsline{toc}{subsection}{А.4 Модуль, содержащий в себе вспомогательные функции для моделирования и построения}
     \lstinputlisting[language=python,mathescape=true]{sources/utils_report.py}
     }

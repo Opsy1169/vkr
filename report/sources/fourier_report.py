@@ -1,6 +1,3 @@
-
-
-
 def fourierArr(Nx, x_right, x_left, f, u, func):
     x = np.linspace(x_left, x_right, Nx)
     k = 2 * np.pi / (0.000633 * f)
@@ -74,10 +71,6 @@ def Fourier(Nx, Nu, u_left, u_right, x_left, x_right, f, is2d, func):
         plt.xlabel('x, mm')
         plt.ylabel('y, mm')
         plt.grid()
-        plt.savefig(
-            "plots/pe_odd_u(" + str(u_left) + ", " + str(u_right) + ", " + str(Nu) + ")_x(" + str(
-                x_left) + ", " + str(
-                x_right) + ", " + str(Nx) + ")_param(" + str() + ").png")
         plt.show()
     return Fabs
 

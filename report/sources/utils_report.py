@@ -1,4 +1,3 @@
-
 def acceleration(Nx, x_right, x_left, Nu, u_left, u_right):
     u = np.linspace(u_left, u_right, Nu)
 

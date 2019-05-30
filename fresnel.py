@@ -110,7 +110,7 @@ def fresnel(z, Nx, Nu, x_right, x_left, u_right, u_left, func):
     # plt.show()
     plt.xlim((u_left, u_right))
     plt.ylim((0, np.max(maxvals)*1.1))
-    plt.legend(('param=1', 'param=5', 'param=20', 'param=40'))
+    # plt.legend(('param=1', 'param=5', 'param=20', 'param=40'))
     plt.grid()
     plt.show()
     return Fabs

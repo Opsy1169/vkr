@@ -1,4 +1,3 @@
-
 class Params:
     pe_param = 10
     Aiparam = 20
@@ -20,7 +19,8 @@ def Pe(x):
     return np.exp(1j * (x ** 4) + getPeParam() * 1j * (x ** 2))
 
 def PeGauss(x):
-    return np.exp(x**2/Params.sigma)*np.exp(1j * (x ** 4) + getPeParam() * 1j * (x ** 2))
+    return np.exp(x**2/Params.sigma)*np.exp(1j * (x ** 4)
+                                            + getPeParam() * 1j * (x ** 2))
 
 def Pe_with_param(x, t):
     return np.exp(1j * (x ** 4) + t * 1j * (x ** 2))
@@ -33,13 +33,17 @@ def PeOdd(x):
 
 def PeOdd2d(x, y):
     if ((x >= 0) & (y >= 0)):
-        return np.exp(1j * (x ** 4) + getPeParam() * 1j * (x ** 2) + 1j * (y ** 4) + getPeParam() * 1j * (y ** 2))
+        return np.exp(1j * (x ** 4) + getPeParam() * 1j * (x ** 2) + 1j *
+                      (y ** 4) + getPeParam() * 1j * (y ** 2))
     elif ((x >= 0) & (y < 0)):
-        return np.exp(1j * (x ** 4) + getPeParam() * 1j * (x ** 2) + 1j * -(y ** 4) + getPeParam() * 1j * -(y ** 2))
+        return np.exp(1j * (x ** 4) + getPeParam() * 1j * (x ** 2) + 1j
+                      * -(y ** 4) + getPeParam() * 1j * -(y ** 2))
     elif ((x < 0) & (y > 0)):
-        return np.exp(1j * -(x ** 4) + getPeParam() * 1j * -(x ** 2) + 1j * (y ** 4) + getPeParam() * 1j * (y ** 2))
+        return np.exp(1j * -(x ** 4) + getPeParam() * 1j * -(x ** 2) + 1j
+                      * (y ** 4) + getPeParam() * 1j * (y ** 2))
     else:
-        return np.exp(1j * -(x ** 4) + getPeParam() * 1j * -(x ** 2) + 1j * -(y ** 4) + getPeParam() * 1j * -(y ** 2))
+        return np.exp(1j * -(x ** 4) + getPeParam() * 1j * -(x ** 2) + 1j
+                      * -(y ** 4) + getPeParam() * 1j * -(y ** 2))
 
 def Gauss(x):
     return np.exp(-x ** 2 / Params.sigma ** 2)
@@ -53,7 +57,8 @@ def AiEven(x):
 
 
 def AiEven2d(x, y):
-    return np.exp(1j * getAiParam() * (abs(x) ** 3) / 3 + 1j * getAiParam() * (abs(y) ** 3) / 3)
+    return np.exp(1j * getAiParam() * (abs(x) ** 3) / 3 + 1j
+                  * getAiParam() * (abs(y) ** 3) / 3)
 
 
 def AiI(x):
@@ -64,7 +69,8 @@ def Pe2d(x, y):
 
 
 def Ai2d(x, y):
-    return np.exp(1j * getAiParam() * x ** 3 + 1j * getAiParam() * y ** 3)
+    return np.exp(1j * getAiParam() * x ** 3 + 1j
+                  * getAiParam() * y ** 3)
 
 def getInitPe2d():
     xright = 2
