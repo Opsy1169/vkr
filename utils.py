@@ -287,26 +287,29 @@ def fresfour(z, Nx, Nu, x_right, x_left, u_right, u_left, func, f, is2d):
 
 
 def accelerationVer2():
-    Nx = 2001
+    Nx = 4001
     Nu = 1001
     u_left = -3
     u_right = 3
-    x_left = -1
-    x_right = 1
+    x_left = -2
+    x_right = 2
     u = np.linspace(u_left, u_right, Nu)
     x = np.linspace(x_left, x_right, Nx)
-    z_quan = 40
-    z_0 = 900
-    z_step = 20
+    f = 300
+    z_quan = 2
+    z_0 = 200
+    z_step = 200
     v = np.linspace(z_0, z_0 + z_step * (z_quan - 1), z_quan)
     output = []
     start = time.time()
     Fmid = [0] * (Nx - 1)
-    func = beams.Pe
+    func = beams.Ai
+    new_x = []
     for i in range(Nx - 1):
         Fmid[i] = func((x[i] + x[i + 1]) / 2) * (x[i + 1] - x[i])
+        new_x.append((x[i + 1] + x[i]) / 2)
     for i in range(z_quan):
-        outputLine = fresnel_four(i * z_step + z_0, Nx, Nu, x, u, Fmid)
+        outputLine = fresnel_four(f, i * z_step + z_0, Nx, Nu, new_x, u, Fmid)
         output.append(outputLine)
         # for j in range(repeat_time):
         #     output.append(outputLine)
@@ -326,24 +329,24 @@ def accelerationVer2():
     ax.plot_surface(u, v, output, cmap=plt.cm.binary)
     pylab.show()
 
-def fresnel_four(z, Nx, Nu, x, u, Fmid):
+def fresnel_four(f, z, Nx, Nu, x, u, Fmid):
 
     F = [0] * Nu
 
     k = 2 * np.pi / (0.000633)
-    f = 150
     start = time.clock()
-    new_x = []
-    for i in range(Nx - 1):
-        new_x.append((x[i + 1] + x[i]) / 2)
-    step_x = new_x[1] - new_x[0]
+    # new_x = []
+    # for i in range(Nx - 1):
+    #     new_x.append((x[i + 1] + x[i]) / 2)
+    step_x = x[1] - x[0]
     temp = (-1j * k / (z))
+    dx = (x[-1] - x[0])/Nx
     secondtemp = 1j * (k / 2) * ((f - z) / (f * z))
     for n in range(Nu):
         F[n] = 0
         for i in range(Nx - 1):
-            F[n] += Fmid[i] * np.exp(temp * (new_x[i]) * u[n] + secondtemp * (new_x[i]) ** 2)  # сейчас в формуле в экспоненте стоит -I, чтобы было похоже на результат Фурье
-        F[n] *= np.exp(-temp/2 * u[n]**2)
+            F[n] += Fmid[i] * np.exp(temp * (x[i]) * u[n] + secondtemp * (x[i]) ** 2)  # сейчас в формуле в экспоненте стоит -I, чтобы было похоже на результат Фурье
+        F[n] *= np.exp(-temp/2 * u[n]**2)*dx
         # F[n] *=
         # print(F[j])
     F = list(map(lambda x: x * np.exp(1j * k * z) * np.sqrt(-1j * k / (2 * np.pi * z)), F))
@@ -370,10 +373,10 @@ def normalizeArray(arr):
 
 
 def beamsForDifferentFocus(f, func):
-    Nx = 3001
-    Nu = 1501
-    u_left = -4
-    u_right = 4
+    Nx = 2001
+    Nu = 2001
+    u_left = -1
+    u_right = 10
     x_left = -2
     x_right = 2
     u = np.linspace(u_left, u_right, Nu)
@@ -387,13 +390,13 @@ def beamsForDifferentFocus(f, func):
     plt.show()
 
 def beamsForDifferentParam(params, func):
-    Nx = 5001
+    Nx = 3001
     Nu = 1501
     u_left = -1
-    u_right = 6
-    x_left = -2
-    x_right = 2
-    f = 1000
+    u_right = 10
+    x_left = -1
+    x_right = 1
+    f = 200
     u = np.linspace(u_left, u_right, Nu)
     x = np.linspace(x_left, x_right, Nx)
     leg = []
@@ -415,18 +418,76 @@ def beamsForDifferentParam(params, func):
 
 def beamsForDifferentInputRange(rights, lefts, func):
     Nx = 2001
-    Nu = 1501
-    u_left = -4
-    u_right = 4
+    Nu = 2501
+    u_left = -1
+    u_right = 10
     x_left = -2
     x_right = 2
-    f = 1000
+    f = 200
     u = np.linspace(u_left, u_right, Nu)
     x = np.linspace(x_left, x_right, Nx)
     leg = []
     for i in range(len(rights)):
-        a = fourier.fourierArr((rights[i]-lefts[i])*800+1, rights[i], lefts[i], f, u, func)
+        a = fourier.fourierArr(int((rights[i]-lefts[i])*900+1), rights[i], lefts[i], f, u, func)
         # plt.plot(a, u)
         leg.append('right = ' + str(rights[i]) + "; left = " + str(lefts[i]))
     plt.legend(leg)
     plt.show()
+
+def accelerationCompare():
+    Nx = 2001
+    Nu = 1001
+    u_left = -3
+    u_right = 3
+    x_left = -1
+    x_right = 1
+    f = 150
+    z = 250
+    param = 20
+    beams.setPeParam(param)
+    beams.setAiParam(param)
+    x = np.linspace(x_left, x_right, Nx)
+    u = np.linspace(u_left, u_right, Nu)
+    Ai_input = [0] * (Nx - 1)
+    Pe_input = [0] * (Nx - 1)
+    new_x = []
+    for i in range(Nx - 1):
+        Ai_input[i] = beams.Ai((x[i] + x[i + 1]) / 2) * (x[i + 1] - x[i])
+        Pe_input[i] = beams.Pe((x[i] + x[i + 1]) / 2) * (x[i + 1] - x[i])
+        new_x.append((x[i + 1] + x[i]) / 2)
+    Ai_output = fresnel_four(f, z, Nx, Nu, new_x, u, Ai_input)
+    Pe_output = fresnel_four(f, z, Nx, Nu, new_x, u, Pe_input)
+    plt.plot(u, Ai_output, u, Pe_output)
+    plt.show()
+
+
+def pearceyShit():
+    Nx = 1001
+    Nu = 1001
+    u_left = -1
+    u_right = 1
+    x_left = -1
+    x_right = 1
+    param_start = 0
+    param_end = 3
+    N_param = 30
+    start = time.clock()
+    params = np.linspace(param_start, param_end, N_param)
+    u = np.linspace(u_left, u_right, Nu)
+    new_u = np.array(list(map(lambda x: x/0.01, u)))
+    output = []
+    for i in range(len(params)):
+        beams.setPeParam(params[i]/0.1)
+        temp = fourier.fourierArr(Nx, x_right, x_left, 200, new_u, beams.Pe)
+        temp = list(map(abs, temp))
+        output.append(temp)
+
+    end = time.clock()
+    output = np.array(output)
+    print('time:' + str(end - start))
+    u, params = np.meshgrid(u, params)
+    fig = pylab.figure()
+    axes = Axes3D(fig)
+    axes.plot_surface(u, params, output, cmap=plt.cm.jet)
+    pylab.show()
+

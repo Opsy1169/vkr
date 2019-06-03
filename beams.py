@@ -15,7 +15,7 @@ from functools import reduce
 
 class Params:
     pe_param = 10
-    Aiparam = 20
+    Aiparam = 10
     sigma = 1000
 
 def setPeParam( param):
@@ -82,15 +82,18 @@ def AiI(x):
 def Pe2d(x, y):
     return np.exp(1j * (x ** 4 + y ** 4) + 1j * (x ** 2 + y ** 2))
 
+def Pe2d_right(q, x):
+    return np.exp(1j * (q ** 4 ) + 1j * (q ** 2 * x))
+
 
 def Ai2d(x, y):
     return np.exp(1j * getAiParam() * x ** 3 + 1j * getAiParam() * y ** 3)
 
 def getInitPe2d():
-    xright = 2
-    xleft = -2
-    yright = 2
-    yleft = -2
+    xright = 1
+    xleft = -1
+    yright = 1
+    yleft = -1
     nx = 151
     ny = 151
     x = np.linspace(xleft, xright, nx)

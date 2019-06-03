@@ -25,6 +25,7 @@ def fourierArr(Nx, x_right, x_left, f, u, func):
         Fmid[i] = func((x[i] + x[i + 1]) / 2) * (x[i + 1] - x[i])
     output = []
     temp = -1j*k/2
+    # temp = 1j
     multiplier = (x_right - x_left) / (Nx)
     for j in range(len(u)):
         val = 0
@@ -107,14 +108,14 @@ def Fourier2d():
     init, x, y = beams.getInitPe2d()
     start = time.clock()
     # init, x, y = getInitAi2d()
-    uleft = -2
-    uright = 2
-    vleft = -2
-    vright = 2
+    uleft = -0.5
+    uright = 0.5
+    vleft = -0.5
+    vright = 0.5
 
-    nv = 101
-    nu = 101
-    koef = 2 * np.pi / (0.000633 * 1000)
+    nv = 71
+    nu = 71
+    koef = 2 * np.pi / (0.000633 * 300)
     u = np.linspace(uleft, uright, nu)
     v = np.linspace(vleft, vright, nv)
     output = []
@@ -148,3 +149,5 @@ def Fourier2d():
     axes = Axes3D(fig)
     axes.plot_surface(u, v, output, cmap=plt.cm.jet)
     pylab.show()
+
+
