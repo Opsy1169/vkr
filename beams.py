@@ -14,8 +14,8 @@ from functools import reduce
 
 
 class Params:
-    pe_param = 10
-    Aiparam = 10
+    pe_param = 20
+    Aiparam = 20
     sigma = 1000
 
 def setPeParam( param):

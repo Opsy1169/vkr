@@ -291,11 +291,11 @@ def accelerationVer2():
     Nu = 1001
     u_left = -3
     u_right = 3
-    x_left = -2
-    x_right = 2
+    x_left = -1.5
+    x_right = 1.5
     u = np.linspace(u_left, u_right, Nu)
     x = np.linspace(x_left, x_right, Nx)
-    f = 300
+    f = 200
     z_quan = 2
     z_0 = 200
     z_step = 200
@@ -442,7 +442,7 @@ def accelerationCompare():
     x_left = -1
     x_right = 1
     f = 150
-    z = 250
+    z = 500
     param = 20
     beams.setPeParam(param)
     beams.setAiParam(param)
@@ -453,7 +453,7 @@ def accelerationCompare():
     new_x = []
     for i in range(Nx - 1):
         Ai_input[i] = beams.Ai((x[i] + x[i + 1]) / 2) * (x[i + 1] - x[i])
-        Pe_input[i] = beams.Pe((x[i] + x[i + 1]) / 2) * (x[i + 1] - x[i])
+        Pe_input[i] = beams.PeOdd((x[i] + x[i + 1]) / 2) * (x[i + 1] - x[i])
         new_x.append((x[i + 1] + x[i]) / 2)
     Ai_output = fresnel_four(f, z, Nx, Nu, new_x, u, Ai_input)
     Pe_output = fresnel_four(f, z, Nx, Nu, new_x, u, Pe_input)
@@ -491,3 +491,12 @@ def pearceyShit():
     axes.plot_surface(u, params, output, cmap=plt.cm.jet)
     pylab.show()
 
+def plotshit():
+    a = [0.02, 0.1, 0.15, 0.16, 0.13, 0.06, 0.02, -0.01]
+    b = [-0.11, 0, -0.02, -0.17, -0.3, -0.45, -0.6, -1]
+    c = [100, 150, 200, 250, 300, 350, 400, 500]
+    c1 =[100, 150, 200, 250, 300]
+    focus_offset = [1.2, 0.6, 0.3, 0.05, 0]
+    # plt.plot(c1, focus_offset)
+    plt.plot(c, a, c, b)
+    plt.show()
