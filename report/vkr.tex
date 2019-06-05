@@ -381,7 +381,7 @@ showstringspaces=false,
 
     \textbf{Презентация:} 12 слайдов.
 
-    \textit{ПУЧКИ ЭЙРИ, ПУЧКИ ПИРСИ, БЕЗДИФРАКЦИОННЫЕ ПУЧКИ, ПРЕОБРАЗОВАНИЕ ФУРЬЕ, ПРЕОБРАЗОВАНИЕ ФРЕНЕЛЯ, УСКОРЯЮЩИЕСЯ ПУЧКИ, ЧИСЛЕННОЕ
+    \textit{ПУЧКИ ЭЙРИ, ПУЧКИ ПИРСИ, БЕЗДИФРАКЦИОННЫЕ ПУЧКИ, \\ ПРЕОБРАЗОВАНИЕ ФУРЬЕ, ПРЕОБРАЗОВАНИЕ ФРЕНЕЛЯ, УСКОРЯЮЩИЕСЯ ПУЧКИ, ЧИСЛЕННОЕ
     ИНТЕГРИРОВАНИЕ}
 
     Объектом исследования данной научно-исследовательской работы
@@ -592,7 +592,7 @@ showstringspaces=false,
     {
 
     \vspace{-0.2cm}
-    Для написания программы использовался язык
+    Для реализации cамой программы использовался язык
     программирования Python, так как он позволяет легко реализовать весь
     необходимый функционал, предлагает большой выбор готовых средств для
     использования, сравнения и проверки результатов. Работа велась в среде
@@ -825,8 +825,8 @@ showstringspaces=false,
     однако такого же элегантного решения проблемы нет, а наиболее удобной реализацией станет кусочно-заданная функция следующего вида:
     \[PeOdd(x) = \left\{
     \begin{array}{lr}
-        \exp(i(x^4 + tx^2)) & : x \ge 0\\
-        \exp(i(-x^4 - tx^2)) & : x < 0
+        \exp(i(x^4 + tx^2)) & : x \ge 0,\\
+        \exp(i(-x^4 - tx^2)) & : x < 0.
     \end{array}
     \right.
     \]
@@ -1040,7 +1040,7 @@ showstringspaces=false,
     \begin{figure}[H]
         \begin{center}
             \includegraphics[width=10cm]{plots/pearceyoutput3}
-            \caption{Амплитуда выходного поля пучков Пирси при $ \alpha  = 1, f = 1000$мм}
+            \caption{Амплитуда выходного поля пучков Пирси при $ \alpha  = 1, f = 1000$ мм}
             \label{pearceyoutput3}
         \end{center}
     \end{figure}
@@ -1112,7 +1112,7 @@ showstringspaces=false,
     \begin{figure}[H]
         \begin{center}
             \includegraphics[width=10cm]{plots/aieven_output}
-            \caption{Амплитуда выходного поля модифицированного пучка Эйри, $ \alpha  = 5, f = 2000$мм}
+            \caption{Амплитуда выходного поля модифицированного пучка Эйри, $ \alpha  = 5, f = 2000$ мм}
             \label{aieven_output}
         \end{center}
     \end{figure}
@@ -1127,7 +1127,7 @@ showstringspaces=false,
     \begin{figure}[H]
         \begin{center}
             \includegraphics[width=10cm]{plots/peodd_output}
-            \caption{Амплитуда выходного поля модифицированного пучка Пирси, $ \alpha  = 5, f = 2000$мм}
+            \caption{Амплитуда выходного поля модифицированного пучка Пирси, $ \alpha  = 5, f = 2000$ мм}
             \label{peodd_output}
         \end{center}
     \end{figure}
@@ -1178,14 +1178,14 @@ showstringspaces=false,
     \begin{figure}[H]
         \centering
         \includegraphics[height = 9cm]{plots/fres300.png}
-        \caption{График амплитуды пучка Эйри при $z = 300$мм}
+        \caption{График амплитуды пучка Эйри при $z = 300$ мм}
         \label{fres300}
     \end{figure}
 
     \begin{figure}[H]
         \centering
         \includegraphics[height = 10cm]{plots/fres1200.png}
-        \caption{График амплитуды пучка Эйри $z = 1200$мм}
+        \caption{График амплитуды пучка Эйри $z = 1200$ мм}
         \label{fres1200}
     \end{figure}
     \vspace{0.5cm}
@@ -1273,7 +1273,7 @@ showstringspaces=false,
     \begin{figure}[H]
         \centering
         \includegraphics[height = 10cm]{plots/four_fres_300_400.png}
-        \caption{График амплитуды пучка Эйри при $f = 300$мм, $z = 400$мм}
+        \caption{График амплитуды пучка Эйри при $f = 300$ мм, $z = 400$ мм}
         \label{four_fres_300_400}
     \end{figure}
     \vspace{0.5cm}
@@ -1285,14 +1285,14 @@ showstringspaces=false,
     \begin{figure}[H]
         \centering
         \includegraphics[height = 10cm]{plots/ai_acc_before_focus.png}
-        \caption{Ускорение пучка Эйри, $f = 100$мм}
+        \caption{Ускорение пучка Эйри, $f = 100$ мм}
         \label{correct_acc}
     \end{figure}
 
     \begin{figure}[H]
         \centering
         \includegraphics[height = 10cm]{plots/pe_acc_before_focus.png}
-        \caption{Ускорение нечетного пучка Пирси, $f = 100$мм}
+        \caption{Ускорение нечетного пучка Пирси, $f = 100$ мм}
         \label{correct_acc_peodd}
     \end{figure}
     \vspace{0.4cm}
@@ -1425,7 +1425,7 @@ showstringspaces=false,
         \centering
         \includegraphics[height = 10cm]{plots/pe3d}
         \vspace{0.2cm}
-        \caption{График амплитуды двумерного пучка Пирси при $f = 650$мм}
+        \caption{График амплитуды двумерного пучка Пирси при $f = 650$ мм}
         \label{pe3d}
     \end{figure}
 
@@ -1435,7 +1435,7 @@ showstringspaces=false,
         \centering
         \includegraphics[height = 10cm]{plots/ai3d}
         \vspace{0.4cm}
-        \caption{График амплитуды двумерного пучка Эйри при $f = 650$мм}
+        \caption{График амплитуды двумерного пучка Эйри при $f = 650$ мм}
         \label{ai3d}
     \end{figure}
     }\label{sec:моделирование-трехмерной-картины-распространения-пучков}
@@ -1500,76 +1500,73 @@ showstringspaces=false,
 
         \item \sloppy{
         Observation of Accelerating Airy Beams [Текст] / G. A.
-        Siviloglou [and other] // Physical Review Letters. -- 2007. -- Vol. 99(21), 213901. \label{first_airy} }
+        Siviloglou [et al.] // Physical Review Letters. -- 2007. -- Vol. 99(21). -- №213901. -- P. 1-4. \label{first_airy} }
 
         \item \sloppy{
         Airy beam [Электронный ресурс] // Википедия : свободная энцикл. –
-        Электрон. дан. – [Б. м.], 2018. – URL: \url{https://en.wikipedia.org/wiki/Airy_beam} (дата обращения: 11.11.2018). \label{airy_wiki}}
+        Электрон. дан. -- [Б. м.], 2018. -- URL: \url{https://en.wikipedia.org/wiki/Airy_beam} (дата обращения: 11.11.2018). \label{airy_wiki}}
 
 
         \item \sloppy{
         Catastrophe theory [Электронный ресурс] // Википедия : свободная
-        энцикл. – Электрон. дан. – [Б. м.], 2018. – URL:  \url{https://en.wikipedia.org/wiki/Catastrophe_theory}
+        энцикл. -- Электрон. дан. -- [Б. м.], 2018. -- URL:  \url{https://en.wikipedia.org/wiki/Catastrophe_theory}
         (дата обращения: 10.12.2018). \label{catastrophe}}
 
 
 
         \item \sloppy{
         Хонина, С. Н. Ограниченные одномерные пучки Эйри: лазерный веер
-        [Текст] / С.Н. Хонина, С.Г. Волотовский // Компьютерная оптика. – 2008 – Т.
-        32, № 2. – С.168-174. \label{Khonina_2008}}
+        [Текст] / С.Н. Хонина, С.Г. Волотовский // Компьютерная оптика. -- 2008 -- Т.
+        32, № 2. -- С.168-174. \label{Khonina_2008}}
 
         \item \sloppy{
         Auto-focusing and self-healing of Pearcey beams [Текст]
-        / James D. Ring [and others] // Optics express -- 2012 -- Vol. 20, № 17. -- P. 18955-18966. \label{pe_selfheal}}
+        / James D. Ring [et al.] // Optics express. -- 2012. -- Vol. 20, № 17. -- P. 18955-18966. \label{pe_selfheal}}
 
 
         \item \sloppy{
         Khonina, S. N. Specular and vortical Airy beams [Текст] / Svetlana N.
-        Khonina // Optics Communications – 2011 – № 284(19) – P. 4263–4271 \label{Khonina_2011}}
+        Khonina // Optics Communications. -- 2011. -- № 284(19). -- P. 4263-4271. \label{Khonina_2011}}
 
         \item \sloppy{
         Abramowitz, M. Handbook of Mathematical Functions [Текст] / M.
-        Abramowitz, I.A. Stegun. – Dover, 1972. – 456 p. \label{math_func}}
+        Abramowitz, I.A. Stegun. -- Dover, 1972. -- 456 p. \label{math_func}}
 
          \item\sloppy{
-        Зорич, В. А. Математический анализ [Текст]/ Зорич В. А. — М.: Физматлит, 1984. — 544 с.\label{zorich} }
+        Зорич, В. А. Математический анализ [Текст]/ Зорич В. А. -- М.: Физматлит, 1984. -- 544 с.\label{zorich} }
 
 
 
         \item \sloppy{
-        Virtual source of a Pearcey beam [Текст] / Dongmei Deng [and others] // Optics Letters. – 2014. –
-        T. 39, № 9. – P. 2703-2706 \label{pe_art}}
+        Virtual source of a Pearcey beam [Текст] / Dongmei Deng [et al.] // Optics Letters. -- 2014. -- T. 39, № 9. -- P. 2703-2706. \label{pe_art}}
 
         \item \sloppy{
         Самарский, А.А. Численные методы  [Текст] /
-        Самарский А.А., Гулин А.В. — М.: Наука. Гл. ред. физ-мат. лит., 1989.— 432 с. \label{samarsky}}
+        Самарский А.А., Гулин А.В. -- М.: Наука. Гл. ред. физ-мат. лит., 1989. -- 432 с. \label{samarsky}}
 
        \item \sloppy{ Залманзон Л.A. Преобразования Фурье, Уолша, Хаара и их применение в управлении, связи и других областях [Текст]/
-        Залманзон, Л.A. — М.: Наука. Гл. ред. физ.-мат. лит., 1989. - 496 с. \label{fres} }
+        Залманзон, Л.A. -- М.: Наука. Гл. ред. физ.-мат. лит., 1989. -- 496 с. \label{fres} }
 
         \item \sloppy{
         Numpy and Scipy Documentation [Электронный ресурс] // Официальный
-        сайт документации библиотек Numpy и Scipy – Электрон. дан. – 2018 URL:
-        \url{https://docs.scipy.org/doc/} (дата обращения: 11.11.2018) \label{np}}
+        сайт документации библиотек Numpy и Scipy. -- Электрон. дан. -- 2018. -- URL:
+        \url{https://docs.scipy.org/doc/} (дата обращения: 11.11.2018). \label{np}}
 
         \item \sloppy{
         Mathematical functions for complex numbers [Электронный
-        ресурс] // Документация: стандартная библиотека Python – Электрон. дан. – 2018. – URL: \url{https://docs.python.org/2/library/cmath.html} (дата обращения:
-        14.11.2018) \label{cmath}}
-         \vspace{-0.9cm}
+        ресурс] // Документация: стандартная библиотека Python. -- Электрон. дан. -- 2018. -- URL: \url{https://docs.python.org/2/library/cmath.html} (дата обращения:
+        14.11.2018). \label{cmath}}
+
         \item \sloppy{
         Matplotlib Documentation [Электронный ресурс] // Официальный сайт
-        библиотеки Matplotlib – Электрон. дан. – 2018. -- URL:
-        https://matplotlib.org/3.0.2/index.html (дата обращения: 15.11.2018) \label{plt}}
+        библиотеки Matplotlib. -- Электрон. дан. -- 2018. -- URL:
+        https://matplotlib.org/3.0.2/index.html (дата обращения: 15.11.2018). \label{plt}}
 
         \item \sloppy{
-        Gibbs phenomenon [Электронный ресурс] // Википедия : свободная энцикл. –
-        Электрон. дан. – [Б. м.], 2019. – URL: \url{https://en.wikipedia.org/wiki/Gibbs_phenomenon} (дата обращения: 25.5.2019) \label{gibbs}}
+        Gibbs phenomenon [Электронный ресурс] // Википедия : свободная энцикл. -- Электрон. дан. -- [Б. м.], 2019. -- URL: \url{https://en.wikipedia.org/wiki/Gibbs_phenomenon} (дата обращения: 25.5.2019)/ \label{gibbs}}
 
         \item \sloppy{
-        Acelerating optical beams [Текст] / Miguel A. Bandres [and others]  // Optics and photonics news – 2013 – Vol. 24(6) –
-        P. 30-37 \label{airy_acc}}
+        Acelerating optical beams [Текст] / Miguel A. Bandres [et al.]  // Optics and photonics news. -- 2013. -- Vol. 24(6). -- P. 30-37. \label{airy_acc}}
 
 %        \item\sloppy{
 %        Fresnel diffraction [Электронный ресурс] // Википедия : свободная энцикл. –
