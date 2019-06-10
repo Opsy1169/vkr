@@ -40,6 +40,8 @@ def plotSmthn():
     plt.show()
 
 
+
+
 def Pearcey():
     Nx = 5001
     Nu = 2001
@@ -371,67 +373,127 @@ def normalizeArray(arr):
     arr /= max
     return arr
 
+def fresnel_four_comparing(f, z, Nx, x_left, x_right, Nu, u, func):
+    F = [0] * Nu
+    k = 2 * np.pi / (0.000633)
+    start = time.clock()
+    x = np.linspace(x_left, x_right, Nx)
+    step_x = x[1] - x[0]
+    Fmid = [0] * (Nx - 1)
+    new_x = []
+    max_x = []
+    for i in range(Nx - 1):
+        Fmid[i] = func((x[i] + x[i + 1]) / 2) * (x[i + 1] - x[i])
+        new_x.append((x[i + 1] + x[i]) / 2)
+    x = new_x
+    temp = (-1j * k / (z))
+    dx = (x[-1] - x[0])/Nx
+    secondtemp = 1j * (k / 2) * ((f - z) / (f * z))
+    for n in range(Nu):
+        F[n] = 0
+        for i in range(Nx - 1):
+            F[n] += Fmid[i] * np.exp(temp * (x[i]) * u[n] + secondtemp * (x[i]) ** 2)  # сейчас в формуле в экспоненте стоит -I, чтобы было похоже на результат Фурье
+        F[n] *= np.exp(-temp/2 * u[n]**2)*dx
+    F = list(map(lambda x: x * np.exp(1j * k * z) * np.sqrt(-1j * k / (2 * np.pi * z)), F))
+    Fabs = list(map(abs, F))
+    end = time.clock()
+    print('time:' + str(end - start))
+    plt.plot(u, Fabs)
+    return Fabs
+
+
 
 def beamsForDifferentFocus(f, func):
     Nx = 2001
     Nu = 2001
-    u_left = -1
-    u_right = 10
-    x_left = -2
-    x_right = 2
+    u_left = -3
+    u_right = 5
+    x_left = -1
+    x_right = 1
+    z = 400
     u = np.linspace(u_left, u_right, Nu)
     x = np.linspace(x_left, x_right, Nx)
     leg = []
+    max_val = []
+    max_x = []
+    Fmid = [0] * (Nx - 1)
+    new_x = []
+    for i in range(Nx - 1):
+        Fmid[i] = func((x[i] + x[i + 1]) / 2) * (x[i + 1] - x[i])
+        new_x.append((x[i + 1] + x[i]) / 2)
     for i in range(len(f)):
-        a = fourier.fourierArr(Nx, x_right, x_left, f[i], u, func)
+        # a = fourier.fourierArr(Nx, x_right, x_left, f[i], u, func)
+        a = fresnel_four(f[i], z, Nx, Nu, new_x, u, Fmid)
+        a = np.array(a)
         # plt.plot(a, u)
         leg.append('f = ' + str(f[i]) + ', mm')
+        # max_val.append(max(a))
+        max_x.append(u[a.argmax()])
+    print(max_x)
     plt.legend(leg)
     plt.show()
 
+    plt.plot(f, max_x)
+    plt.show()
+
 def beamsForDifferentParam(params, func):
-    Nx = 3001
-    Nu = 1501
-    u_left = -1
+    Nx = 2001
+    Nu = 1001
+    u_left = 0
     u_right = 10
-    x_left = -1
-    x_right = 1
-    f = 200
+    x_left = -2
+    x_right = 2
+    f = 400
+    z = 400
     u = np.linspace(u_left, u_right, Nu)
     x = np.linspace(x_left, x_right, Nx)
     leg = []
+    Fmid = [0] * (Nx - 1)
+    new_x = []
+    max_x = []
     print(func == beams.Ai)
     isAi = True if(func == beams.Ai) else False
     print(isAi)
     for i in range(len(params)):
         if(isAi):
             beams.setAiParam(params[i])
-            print(beams.getAiParam())
         else:
             beams.setPeParam(params[i])
-            print(beams.getPeParam())
-        a = fourier.fourierArr(Nx, x_right, x_left, f, u, func)
-        # plt.plot(a, u)
+        a = fourier.fourierArr(Nx, x_right, x_left, f, u, beams.Ai)
+        # print(beams.getAiParam())
+        # a = fresnel_four_comparing(f, z, Nx, x_left, x_right, Nu,  u, beams.Ai)
+        a = np.array(a)
+        max_x.append(u[a.argmax()])
         leg.append('alpha = ' + str(params[i]))
     plt.legend(leg)
+    print(max_x)
     plt.show()
 
 def beamsForDifferentInputRange(rights, lefts, func):
     Nx = 2001
-    Nu = 2501
+    Nu = 1001
     u_left = -1
     u_right = 10
     x_left = -2
     x_right = 2
-    f = 200
+    f = 300
+    z = 400
     u = np.linspace(u_left, u_right, Nu)
     x = np.linspace(x_left, x_right, Nx)
     leg = []
+    Fmid = [0] * (Nx - 1)
+    new_x = []
+    max_x = []
     for i in range(len(rights)):
         a = fourier.fourierArr(int((rights[i]-lefts[i])*900+1), rights[i], lefts[i], f, u, func)
+        # b = int((rights[i]-lefts[i])*900+1)
+        # a = fresnel_four_comparing(f, z,  b,  lefts[i], rights[i], Nu, u, beams.Ai)
+        a = np.array(a)
+        max_x.append(u[a.argmax()])
         # plt.plot(a, u)
         leg.append('right = ' + str(rights[i]) + "; left = " + str(lefts[i]))
     plt.legend(leg)
+    print(max_x)
     plt.show()
 
 def accelerationCompare():
@@ -441,7 +503,7 @@ def accelerationCompare():
     u_right = 3
     x_left = -1
     x_right = 1
-    f = 150
+    f = 300
     z = 500
     param = 20
     beams.setPeParam(param)
@@ -496,7 +558,205 @@ def plotshit():
     b = [-0.11, 0, -0.02, -0.17, -0.3, -0.45, -0.6, -1]
     c = [100, 150, 200, 250, 300, 350, 400, 500]
     c1 =[100, 150, 200, 250, 300]
-    focus_offset = [1.2, 0.6, 0.3, 0.05, 0]
-    # plt.plot(c1, focus_offset)
-    plt.plot(c, a, c, b)
+
+    ##################################
+    # f = [100, 150, 200, 250, 300, 350, 400, 450]
+    # f_2_20 = [0.88, 1.32, 1.75, 2.2, 2.6, 3.12, 3.55, 4.01]
+    # f_2_40 = [1.6, 2.43, 3.24, 4.1, 4.91, 5.72, 6.54, 7.4 ]
+    # f_1_20 = [0.22, 0.36, 0.47, 0.58, 0.69, 0.81, 0.93, 1.05]
+    # f_1_40 = [0.37, 0.58, 0.78, 0.99, 1.15, 1.37, 1.57, 1.77]
+    # fig = plt.figure()
+    # ax = plt.subplot(111)
+    # ax.plot(f, f_2_20, label='alpha=20,x=2')
+    # ax.plot(f, f_2_40, label='alpha=40,x=2')
+    # ax.plot(f, f_1_20, label='alpha=20,x=1')
+    # ax.plot(f, f_1_40, label='alpha=40,x=1')
+    # ax.grid()
+    # box = ax.get_position()
+    # ax.set_position([box.x0, box.y0 + box.height * 0.1,
+    #                  box.width, box.height * 0.9])
+    #
+    # # Put a legend below current axis
+    # ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
+    #           fancybox=True, shadow=True, ncol=5)
+    # ax.set_xlabel('f, mm')
+    # ax.set_ylabel('x, mm')
+    ##############################################################
+
+    alpha = [10, 20, 30, 40, 50]
+    alpha_200_2 = [0.82, 1.5, 2.25, 2.9, 3.65]
+    alpha_400_2 = [1.67, 3.05, 4.5, 5.88, 7.32]
+    alpha_200_1 = [0.24, 0.28, 0.38, 0.5, 0.58]
+    alpha_400_1 = [0.3, 0.54, 0.78, 1.02, 1.25]
+
+    ax = plt.subplot(111)
+    ax.plot(alpha, alpha_200_2, label='f=200,x=2')
+    ax.plot(alpha, alpha_400_2, label = 'f=400,x=2')
+    ax.plot(alpha, alpha_200_1, label='f=200,x=1')
+    ax.plot(alpha,  alpha_400_1, label='f=400,x=1')
+    ax.grid()
+    box = ax.get_position()
+    ax.set_position([box.x0, box.y0 + box.height * 0.1,
+                     box.width, box.height * 0.9])
+
+    # Put a legend below current axis
+    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
+              fancybox=True, shadow=True, ncol=5)
+    ax.set_xlabel('alpha')
+    ax.set_ylabel('x, mm')
+    ##############################################################
+
+    # input = [1, 2, 3, 4]
+    # input_200_20 = [0.47, 1.58, 3.56, 6.28]
+    # input_400_20 = [0.94, 3.15, 7.06, 12.8]
+    # input_200_40 = [0.79, 3.06, 6.93, 12.45]
+    # input_400_40 = [1.52, 6, 13.8, 24.8]
+    #
+    # ax = plt.subplot(111)
+    # ax.plot(input, input_200_20, label='f=200,alpha=20')
+    # ax.plot(input, input_400_20, label = 'f=400,alpha=20')
+    # ax.plot(input, input_200_40, label='f=200,alpha=40')
+    # ax.plot(input,  input_400_40, label='f=400,alpha=40')
+    # ax.grid()
+    # box = ax.get_position()
+    # ax.set_position([box.x0, box.y0 + box.height * 0.1,
+    #                  box.width, box.height * 0.9])
+    #
+    # # Put a legend below current axis
+    # ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
+    #           fancybox=True, shadow=True, ncol=5)
+    # ax.set_xlabel('input right border, mm')
+    # ax.set_ylabel('x, mm')
+    ##############################################################
+
+    #  ACCELERATION
+    ###########################################################
+    # f = [100, 150, 200, 250, 300, 350 ]
+    # f_2_20 = [-2.66, -0.7399999999999998, -0.20399999999999974, -0.008000000000000007, 0.08400000000000007, 0.1120000000000001]
+    # f_2_40 = [-1.272, -0.2919999999999998, -0.016000000000000014, 0.08400000000000007, 0.13200000000000012, 0.1280000000000001]
+    # f_1_20 = [-1.64, -0.6320000000000001, -0.23599999999999977, -0.02400000000000002, 0.07600000000000007, 0.1080000000000001]
+    # f_1_40 = [-1.22, -0.31999999999999984, -0.016000000000000014, 0.08400000000000007, 0.1120000000000001, 0.13600000000000012]
+    #
+    # ax = plt.subplot(111)
+    # ax.plot(f, f_2_20, label='alpha=20,x=2')
+    # ax.plot(f, f_2_40, label='alpha=40,x=2')
+    # ax.plot(f, f_1_20, label='alpha=20,x=1')
+    # ax.plot(f, f_1_40, label='alpha=40,x=1')
+    # ax.grid()
+    # box = ax.get_position()
+    # ax.set_position([box.x0, box.y0 + box.height * 0.1,
+    #                  box.width, box.height * 0.9])
+    #
+    # # Put a legend below current axis
+    # ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
+    #           fancybox=True, shadow=True, ncol=5)
+    # ax.set_xlabel('f, mm')
+    # ax.set_ylabel('x, mm')
+    ###################################################
+    # alpha = [10, 20, 30, 40, 50]
+    # alpha_150_1 =  [-0.19799999999999995, -0.32399999999999984, -0.48599999999999977, -0.6299999999999999, -0.8820000000000001]
+    # alpha_300_1 = [0.15600000000000014, 0.11399999999999988, 0.1259999999999999, 0.07200000000000006, -0.01200000000000001]
+    # alpha_150_2 = [-0.19199999999999973, -0.29400000000000004, -0.45599999999999996, -0.738, -1.554]
+    # alpha_300_2 = [0.1499999999999999, 0.13200000000000012, 0.1080000000000001, 0.08400000000000007, 0.03000000000000025]
+    # alpha_150_1.reverse()
+    # alpha_300_1.reverse()
+    # alpha_150_2.reverse()
+    # alpha_300_2.reverse()
+    #
+    # ax = plt.subplot(111)
+    # ax.plot(alpha, alpha_150_1, label='f=150,x=1')
+    # ax.plot(alpha, alpha_300_1, label = 'f=300,x=1')
+    # ax.plot(alpha, alpha_150_2, label='f=150,x=2')
+    # ax.plot(alpha,  alpha_300_2, label='f=300,x=2')
+    # ax.grid()
+    # box = ax.get_position()
+    # ax.set_position([box.x0, box.y0 + box.height * 0.1,
+    #                  box.width, box.height * 0.9])
+    #
+    # # Put a legend below current axis
+    # ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
+    #           fancybox=True, shadow=True, ncol=5)
+    # ax.set_xlabel('alpha')
+    # ax.set_ylabel('x, mm')
+    ##################################################
+    #
+    # input = [1, 2, 3, 4]
+    # input_150_20 = [-0.637, -0.736, -0.758, -0.747]
+    # input_300_20 = [0.07799999999999985, 0.07799999999999985, 0.07799999999999985, 0.07799999999999985]
+    # input_150_40 = [-0.31800000000000006, -0.29600000000000004, -0.29600000000000004, -0.29600000000000004]
+    # input_300_40 = [0.11099999999999999, 0.133, 0.12199999999999989, 0.12199999999999989]
+    #
+    # ax = plt.subplot(111)
+    # ax.plot(input, input_150_20, label='f=150,alpha=20')
+    # ax.plot(input, input_300_20, label = 'f=300,alpha=20')
+    # ax.plot(input, input_150_40, label='f=150,alpha=40')
+    # ax.plot(input,  input_300_40, label='f=300,alpha=40')
+    # ax.grid()
+    # box = ax.get_position()
+    # ax.set_position([box.x0, box.y0 + box.height * 0.1,
+    #                  box.width, box.height * 0.9])
+    #
+    # # Put a legend below current axis
+    # ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
+    #           fancybox=True, shadow=True, ncol=5)
+    # ax.set_xlabel('input right border, mm')
+    # ax.set_ylabel('x, mm')
     plt.show()
+
+def scipyfft():
+    x = np.linspace(-1, 1, 1000)
+    Fmid = []
+    f = 1000
+    k = 2 * np.pi / (0.000633 * f)
+    for i in range(len(x)):
+        Fmid.append(beams.Ai(x[i]))
+    out = sp.fft(x)
+    out = np.abs(out)
+    plt.plot(x, out)
+    plt.show()
+
+def norm(arr):
+    norm = 0
+    for i in range(len(arr)):
+        norm += arr[i]**2
+    return norm
+
+def sko(diffArr, sourceArr):
+    return norm(diffArr)/norm(sourceArr)
+
+
+def precision():
+    Nx = 500
+    Nx1 = 4000
+    Nu = 701
+    u_left = -2
+    u_right = 3
+    x_left = -2
+    x_right = 2
+    f = 400
+    z = 400
+    u = np.linspace(u_left, u_right, Nu)
+    x = np.linspace(x_left, x_right, Nx)
+    leg = []
+    Fmid = [0] * (Nx - 1)
+    new_x = []
+    max_x = []
+    out1 = fourier.fourierArr(Nx, x_right, x_left, f, u, beams.Ai)
+    out2 = fourier.fourierArr(Nx1, x_right, x_left, f, u, beams.Ai)
+    out1_abs = out1.__abs__()
+    out2_abs = out2.__abs__()
+    # print(np.linalg.norm(out1-out2))
+    # print(np.linalg.norm(out1_abs - out2_abs))
+    # print(sko(out1 - out2, out1))
+    diff = out1_abs - out2_abs
+    plt.plot(u, out1_abs, u, out2_abs)
+    plt.show()
+    print(norm(out2_abs))
+    print(norm(out1_abs))
+    print(norm((out1_abs - out2_abs)))
+    print(sko((out1_abs - out2_abs), out1_abs))
+        # print(beams.getAiParam())
+        # a = fresnel_four_comparing(f, z, Nx, x_left, x_right, Nu,  u, beams.Ai)
+
+
+

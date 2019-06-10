@@ -15,7 +15,7 @@ from functools import reduce
 
 class Params:
     pe_param = 20
-    Aiparam = 20
+    Aiparam = 40
     sigma = 1000
 
 def setPeParam( param):
@@ -32,6 +32,12 @@ def getPeParam():
 
 def Pe(x):
     return np.exp(1j * (x ** 4) + getPeParam() * 1j * (x ** 2))
+
+def correctPe(x):
+    return np.exp(1j * (x ** 4) + 1j * ((getPeParam() * x) ** 2))
+
+def correctAi(x):
+    return np.exp(1j * ((getAiParam() * x) ** 3) / 3)
 
 def PeGauss(x):
     return np.exp(x**2/Params.sigma)*np.exp(1j * (x ** 4) + getPeParam() * 1j * (x ** 2))

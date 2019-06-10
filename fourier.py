@@ -26,7 +26,8 @@ def fourierArr(Nx, x_right, x_left, f, u, func):
     output = []
     temp = -1j*k/2
     # temp = 1j
-    multiplier = (x_right - x_left) / (Nx)
+    # multiplier = (x_right - x_left) / (Nx)
+    multiplier = 1
     for j in range(len(u)):
         val = 0
         u_j = u[j]
@@ -52,7 +53,7 @@ def fourierDot(Nx, x_right, x_left, f, u, func):
     for i in range(Nx - 1):
         output += Fmid[i] * np.exp( temp* (x[i] + x[i + 1]) * u)
         # F[j] = F[j] * (x_right-x_left) / (Nx)
-    output = output * (x_right - x_left) / (Nx)
+    # output = output * (x_right - x_left) / (Nx)
     return output
 
 
@@ -72,7 +73,7 @@ def Fourier(Nx, Nu, u_left, u_right, x_left, x_right, f, is2d, func):
         for i in range(Nx - 1):
             F[j] += Fmid[i] * np.exp((temp * (x[i] + x[i + 1]) * u[j]))
         # F[j] = F[j] * (x_right-x_left) / (Nx)
-    F = list(map(lambda x: x * (x_right - x_left) / (Nx), F))
+    # F = list(map(lambda x: x * (x_right - x_left) / (Nx), F))
     Fabs = list(map(abs, F))
     end = time.clock()
     print("time:" + str(end - start))
