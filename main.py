@@ -31,14 +31,14 @@ if __name__ == '__main__':
     # utils.fresfour(400, Nx, Nu, x_right, x_left, u_right, u_left, beams.Ai, 500, False)
     # beams.plotPhasetAi2d()
     # utils.beamsForDifferentParam([50, 40, 30, 20, 10], beams.Ai)
-    utils.precision()
+    # utils.precision()
     # utils.beamsForDifferentInputRange([1, 2], [-1, -2], beams.Ai)
     # utils.beamsForDifferentFocus([100, 150, 200, 250, 300, 350], beams.Ai)
     # 250, 200, 150, 100
     # 450, 400, 350, 300
     # utils.accelerationVer2()
     # utils.accelerationCompare()
-    # utils.plotshit()
+    utils.plotshit()
     # fourier.Fourier2d()
     # utils.acceleration()
     # beams.plotAiPhase()

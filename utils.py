@@ -579,31 +579,31 @@ def plotshit():
     # # Put a legend below current axis
     # ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
     #           fancybox=True, shadow=True, ncol=5)
-    # ax.set_xlabel('f, mm')
-    # ax.set_ylabel('x, mm')
+    # ax.set_xlabel('Фокусное расстояние, мм')
+    # ax.set_ylabel('Ширина, мм')
     ##############################################################
 
-    alpha = [10, 20, 30, 40, 50]
-    alpha_200_2 = [0.82, 1.5, 2.25, 2.9, 3.65]
-    alpha_400_2 = [1.67, 3.05, 4.5, 5.88, 7.32]
-    alpha_200_1 = [0.24, 0.28, 0.38, 0.5, 0.58]
-    alpha_400_1 = [0.3, 0.54, 0.78, 1.02, 1.25]
-
-    ax = plt.subplot(111)
-    ax.plot(alpha, alpha_200_2, label='f=200,x=2')
-    ax.plot(alpha, alpha_400_2, label = 'f=400,x=2')
-    ax.plot(alpha, alpha_200_1, label='f=200,x=1')
-    ax.plot(alpha,  alpha_400_1, label='f=400,x=1')
-    ax.grid()
-    box = ax.get_position()
-    ax.set_position([box.x0, box.y0 + box.height * 0.1,
-                     box.width, box.height * 0.9])
-
-    # Put a legend below current axis
-    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
-              fancybox=True, shadow=True, ncol=5)
-    ax.set_xlabel('alpha')
-    ax.set_ylabel('x, mm')
+    # alpha = [10, 20, 30, 40, 50]
+    # alpha_200_2 = [0.82, 1.5, 2.25, 2.9, 3.65]
+    # alpha_400_2 = [1.67, 3.05, 4.5, 5.88, 7.32]
+    # alpha_200_1 = [0.24, 0.28, 0.38, 0.5, 0.58]
+    # alpha_400_1 = [0.3, 0.54, 0.78, 1.02, 1.25]
+    #
+    # ax = plt.subplot(111)
+    # ax.plot(alpha, alpha_200_2, label='f=200,x=2')
+    # ax.plot(alpha, alpha_400_2, label = 'f=400,x=2')
+    # ax.plot(alpha, alpha_200_1, label='f=200,x=1')
+    # ax.plot(alpha,  alpha_400_1, label='f=400,x=1')
+    # ax.grid()
+    # box = ax.get_position()
+    # ax.set_position([box.x0, box.y0 + box.height * 0.1,
+    #                  box.width, box.height * 0.9])
+    #
+    # # Put a legend below current axis
+    # ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
+    #           fancybox=True, shadow=True, ncol=5)
+    # ax.set_xlabel(u'Параметр \u03B1')
+    # ax.set_ylabel('Ширина, мм')
     ##############################################################
 
     # input = [1, 2, 3, 4]
@@ -625,8 +625,8 @@ def plotshit():
     # # Put a legend below current axis
     # ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
     #           fancybox=True, shadow=True, ncol=5)
-    # ax.set_xlabel('input right border, mm')
-    # ax.set_ylabel('x, mm')
+    # ax.set_xlabel('Правая граница входного размера, мм')
+    # ax.set_ylabel('Ширина, мм')
     ##############################################################
 
     #  ACCELERATION
@@ -650,8 +650,8 @@ def plotshit():
     # # Put a legend below current axis
     # ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
     #           fancybox=True, shadow=True, ncol=5)
-    # ax.set_xlabel('f, mm')
-    # ax.set_ylabel('x, mm')
+    # ax.set_xlabel('Фокусное расстояние, мм')
+    # ax.set_ylabel('Отклонение, мм')
     ###################################################
     # alpha = [10, 20, 30, 40, 50]
     # alpha_150_1 =  [-0.19799999999999995, -0.32399999999999984, -0.48599999999999977, -0.6299999999999999, -0.8820000000000001]
@@ -676,31 +676,31 @@ def plotshit():
     # # Put a legend below current axis
     # ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
     #           fancybox=True, shadow=True, ncol=5)
-    # ax.set_xlabel('alpha')
-    # ax.set_ylabel('x, mm')
+    # ax.set_xlabel(u'Параметр \u03B1')
+    # ax.set_ylabel('Отклонение, мм')
     ##################################################
     #
-    # input = [1, 2, 3, 4]
-    # input_150_20 = [-0.637, -0.736, -0.758, -0.747]
-    # input_300_20 = [0.07799999999999985, 0.07799999999999985, 0.07799999999999985, 0.07799999999999985]
-    # input_150_40 = [-0.31800000000000006, -0.29600000000000004, -0.29600000000000004, -0.29600000000000004]
-    # input_300_40 = [0.11099999999999999, 0.133, 0.12199999999999989, 0.12199999999999989]
-    #
-    # ax = plt.subplot(111)
-    # ax.plot(input, input_150_20, label='f=150,alpha=20')
-    # ax.plot(input, input_300_20, label = 'f=300,alpha=20')
-    # ax.plot(input, input_150_40, label='f=150,alpha=40')
-    # ax.plot(input,  input_300_40, label='f=300,alpha=40')
-    # ax.grid()
-    # box = ax.get_position()
-    # ax.set_position([box.x0, box.y0 + box.height * 0.1,
-    #                  box.width, box.height * 0.9])
-    #
-    # # Put a legend below current axis
-    # ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
-    #           fancybox=True, shadow=True, ncol=5)
-    # ax.set_xlabel('input right border, mm')
-    # ax.set_ylabel('x, mm')
+    input = [1, 2, 3, 4]
+    input_150_20 = [-0.637, -0.736, -0.758, -0.747]
+    input_300_20 = [0.07799999999999985, 0.07799999999999985, 0.07799999999999985, 0.07799999999999985]
+    input_150_40 = [-0.31800000000000006, -0.29600000000000004, -0.29600000000000004, -0.29600000000000004]
+    input_300_40 = [0.11099999999999999, 0.133, 0.12199999999999989, 0.12199999999999989]
+
+    ax = plt.subplot(111)
+    ax.plot(input, input_150_20, label='f=150,alpha=20')
+    ax.plot(input, input_300_20, label = 'f=300,alpha=20')
+    ax.plot(input, input_150_40, label='f=150,alpha=40')
+    ax.plot(input,  input_300_40, label='f=300,alpha=40')
+    ax.grid()
+    box = ax.get_position()
+    ax.set_position([box.x0, box.y0 + box.height * 0.1,
+                     box.width, box.height * 0.9])
+
+    # Put a legend below current axis
+    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
+              fancybox=True, shadow=True, ncol=5)
+    ax.set_xlabel('Правая граница входного размера, мм')
+    ax.set_ylabel('Отклонение, мм')
     plt.show()
 
 def scipyfft():
