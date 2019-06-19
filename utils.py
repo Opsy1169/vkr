@@ -43,14 +43,14 @@ def plotSmthn():
 
 
 def Pearcey():
-    Nx = 5001
-    Nu = 2001
-    u_left = -3
-    u_right = 3
-    x_left = -7
-    x_right = 7
+    Nx = 4001
+    Nu = 701
+    u_left = -4
+    u_right = 4
+    x_left = -3
+    x_right = 3
     F = [0] * Nu
-    f = 1000
+    f = 200
     k = 2 * np.pi / (0.000633 * f)
     Fabs = fourier.Fourier(Nx, Nu, u_left, u_right, x_left, x_right, f, False, beams.Pe)
     maxVal = np.amax(Fabs)
@@ -95,6 +95,47 @@ def halfPearcey():
     #     x_right) + ", " + str(Nx) + ")_param(" + str(pe_param) + ").png")
     plt.show()
 
+
+def sinc():
+    Nx = 1001
+    Nu = 501
+    u_left = -3
+    u_right = 3
+    x_left = -1
+    x_right = 1
+    f = 1000
+    k = 2 * np.pi / (0.000633 * f)
+    fourier.Fourier(Nx, Nu, u_left, u_right, x_left, x_right, f, False, beams.Rect)
+
+def gauss():
+    Nx = 301
+    Nu = 1001
+    u_left = -3
+    u_right = 3
+    x_left = -3
+    x_right = 3
+    f = 1000
+    k = 2 * np.pi / (0.000633 * f)
+    # x = np.linspace(x_left, x_right, Nx)
+    # Fmid = [0]*(Nx)
+    # for i in range(Nx):
+    #     Fmid[i] = beams.Gauss(x[i])
+    # F = np.fft.fft(Fmid)
+    # F = np.fft.fftshift(F)
+    # plt.plot(x, F)
+    # plt.show()
+    fourier.Fourier(Nx, Nu, u_left, u_right, x_left, x_right, f, False, beams.Gauss1)
+
+def gauss1():
+    x = np.linspace(-5, 5, 200)
+    a = [1, 2, 3, 4]
+    print(np.fft.fftshift(a))
+    f = list(map(lambda a: np.exp(-a**2), x))
+    F = np.fft.fft(np.fft.fftshift(f))
+    F = np.fft.fftshift(F)
+    plt.plot(x, F)
+    plt.grid()
+    plt.show()
 
 def Airy():
     Nx = 3501
@@ -439,11 +480,11 @@ def beamsForDifferentFocus(f, func):
 def beamsForDifferentParam(params, func):
     Nx = 2001
     Nu = 1001
-    u_left = 0
-    u_right = 10
+    u_left = -1
+    u_right = 6
     x_left = -2
     x_right = 2
-    f = 400
+    f = 1000
     z = 400
     u = np.linspace(u_left, u_right, Nu)
     x = np.linspace(x_left, x_right, Nx)
@@ -459,24 +500,28 @@ def beamsForDifferentParam(params, func):
             beams.setAiParam(params[i])
         else:
             beams.setPeParam(params[i])
-        a = fourier.fourierArr(Nx, x_right, x_left, f, u, beams.Ai)
+        a = fourier.fourierArr(Nx, x_right, x_left, f, u, func)
         # print(beams.getAiParam())
         # a = fresnel_four_comparing(f, z, Nx, x_left, x_right, Nu,  u, beams.Ai)
         a = np.array(a)
         max_x.append(u[a.argmax()])
         leg.append('alpha = ' + str(params[i]))
+    plt.rcParams.update({'font.size': 12})
+    plt.xlabel('х, мм')
+    plt.ylabel('амплитуда')
     plt.legend(leg)
+    plt.grid()
     print(max_x)
     plt.show()
 
 def beamsForDifferentInputRange(rights, lefts, func):
-    Nx = 2001
-    Nu = 1001
+    Nx = 1001
+    Nu = 1501
     u_left = -1
-    u_right = 10
+    u_right = 6
     x_left = -2
     x_right = 2
-    f = 300
+    f = 1000
     z = 400
     u = np.linspace(u_left, u_right, Nu)
     x = np.linspace(x_left, x_right, Nx)
@@ -491,8 +536,12 @@ def beamsForDifferentInputRange(rights, lefts, func):
         a = np.array(a)
         max_x.append(u[a.argmax()])
         # plt.plot(a, u)
-        leg.append('right = ' + str(rights[i]) + "; left = " + str(lefts[i]))
+        leg.append( "left = " + str(lefts[i])  + '; right = ' + str(rights[i]))
+    plt.rcParams.update({'font.size': 12})
+    plt.xlabel('х, мм')
+    plt.ylabel('амплитуда')
     plt.legend(leg)
+    plt.grid()
     print(max_x)
     plt.show()
 
@@ -558,7 +607,7 @@ def plotshit():
     b = [-0.11, 0, -0.02, -0.17, -0.3, -0.45, -0.6, -1]
     c = [100, 150, 200, 250, 300, 350, 400, 500]
     c1 =[100, 150, 200, 250, 300]
-
+    plt.rcParams.update({'font.size': 14})
     ##################################
     # f = [100, 150, 200, 250, 300, 350, 400, 450]
     # f_2_20 = [0.88, 1.32, 1.75, 2.2, 2.6, 3.12, 3.55, 4.01]
@@ -604,6 +653,7 @@ def plotshit():
     #           fancybox=True, shadow=True, ncol=5)
     # ax.set_xlabel(u'Параметр \u03B1')
     # ax.set_ylabel('Ширина, мм')
+    # plt.show()
     ##############################################################
 
     # input = [1, 2, 3, 4]
@@ -613,10 +663,10 @@ def plotshit():
     # input_400_40 = [1.52, 6, 13.8, 24.8]
     #
     # ax = plt.subplot(111)
-    # ax.plot(input, input_200_20, label='f=200,alpha=20')
-    # ax.plot(input, input_400_20, label = 'f=400,alpha=20')
-    # ax.plot(input, input_200_40, label='f=200,alpha=40')
-    # ax.plot(input,  input_400_40, label='f=400,alpha=40')
+    # ax.plot(input, input_200_20, label='f=200,\u03B1=20')
+    # ax.plot(input, input_400_20, label = 'f=400,\u03B1=20')
+    # ax.plot(input, input_200_40, label='f=200,\u03B1=40')
+    # ax.plot(input,  input_400_40, label='f=400,\u03B1=40')
     # ax.grid()
     # box = ax.get_position()
     # ax.set_position([box.x0, box.y0 + box.height * 0.1,
@@ -627,6 +677,7 @@ def plotshit():
     #           fancybox=True, shadow=True, ncol=5)
     # ax.set_xlabel('Правая граница входного размера, мм')
     # ax.set_ylabel('Ширина, мм')
+    # plt.show()
     ##############################################################
 
     #  ACCELERATION
@@ -678,6 +729,7 @@ def plotshit():
     #           fancybox=True, shadow=True, ncol=5)
     # ax.set_xlabel(u'Параметр \u03B1')
     # ax.set_ylabel('Отклонение, мм')
+    # plt.show()
     ##################################################
     #
     input = [1, 2, 3, 4]
@@ -687,10 +739,10 @@ def plotshit():
     input_300_40 = [0.11099999999999999, 0.133, 0.12199999999999989, 0.12199999999999989]
 
     ax = plt.subplot(111)
-    ax.plot(input, input_150_20, label='f=150,alpha=20')
-    ax.plot(input, input_300_20, label = 'f=300,alpha=20')
-    ax.plot(input, input_150_40, label='f=150,alpha=40')
-    ax.plot(input,  input_300_40, label='f=300,alpha=40')
+    ax.plot(input, input_150_20, label='f=150,\u03B1=20')
+    ax.plot(input, input_300_20, label = 'f=300,\u03B1=20')
+    ax.plot(input, input_150_40, label='f=150,\u03B1=40')
+    ax.plot(input,  input_300_40, label='f=300,\u03B1=40')
     ax.grid()
     box = ax.get_position()
     ax.set_position([box.x0, box.y0 + box.height * 0.1,

@@ -66,6 +66,9 @@ def Fourier(Nx, Nu, u_left, u_right, x_left, x_right, f, is2d, func):
     Fmid = [0] * (Nx - 1)
     for i in range(Nx - 1):
         Fmid[i] = func((x[i] + x[i + 1]) / 2) * (x[i + 1] - x[i])
+    temp_x = np.linspace(x_left, x_right, Nx-1)
+    # plt.plot(temp_x, Fmid)
+    # plt.show()
 
     temp = -1j * k / 2
     for j in range(Nu):
@@ -75,6 +78,8 @@ def Fourier(Nx, Nu, u_left, u_right, x_left, x_right, f, is2d, func):
         # F[j] = F[j] * (x_right-x_left) / (Nx)
     # F = list(map(lambda x: x * (x_right - x_left) / (Nx), F))
     Fabs = list(map(abs, F))
+    # Fabs = list(map(np.real, F))
+    # Fabs = F
     end = time.clock()
     print("time:" + str(end - start))
     if (is2d):

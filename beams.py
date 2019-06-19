@@ -14,9 +14,9 @@ from functools import reduce
 
 
 class Params:
-    pe_param = 20
-    Aiparam = 40
-    sigma = 1000
+    pe_param = 1
+    Aiparam = 5
+    sigma = 2
 
 def setPeParam( param):
     Params.pe_param = param
@@ -66,8 +66,10 @@ def PeOdd2d(x, y):
 
 
 def Gauss(x):
-    return np.exp(-x ** 2 / Params.sigma ** 2)
+    return np.sqrt(2*np.pi)*Params.sigma*np.exp(-((x ** 2) / (2*Params.sigma ** 2)))
 
+def Gauss1(x):
+    return np.exp(-(x ** 2))
 
 def Ai(x):
     return np.exp(1j * getAiParam() * (x ** 3) / 3)
@@ -146,6 +148,9 @@ def plotPePhase():
     plt.plot(a, Fabs)
     plt.grid()
     plt.show()
+
+def Rect(x):
+    return 1
 
 
 def getInitAi2d():
