@@ -278,8 +278,8 @@ def getInitAiEven2d():
 
 def plotPhasetAi2d():
     xright = 2
-    xleft = -2
-    yright = 2
+    xleft = 0
+    yright = 0
     yleft = -2
     nx = 501
     ny = 501
@@ -298,7 +298,7 @@ def plotPhasetAi2d():
     for i in range(len(xmid)):
         xarr = []
         for j in range(len(ymid)):
-            xarr.append(PeOdd2d(x[i], y[j]) * xstep * ystep)
+            xarr.append(Ai2d(x[i], y[j]) * xstep * ystep)
         Fphase.append(xarr)
 
     for i in range(nx - 1):

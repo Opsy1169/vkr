@@ -43,7 +43,8 @@ def fresnel_four(z, Nx, Nu, x, u, Fmid):
     for n in range(Nu):
         F[n] = 0
         for i in range(Nx - 1):
-            F[n] += Fmid[i] * np.exp(temp * (new_x[i]) * u[n] + secondtemp * (new_x[i]) ** 2        F[n] *= np.exp(-temp/2 * u[n]**2)
+            F[n] += Fmid[i] * np.exp(temp * (new_x[i]) * u[n] + secondtemp * (new_x[i]) ** 2
+        F[n] *= np.exp(-temp/2 * u[n]**2)
         F = list(map(lambda x: x * np.exp(1j * k * z) * np.sqrt(-1j * k / (2 * np.pi * z)), F))
     Fabs = list(map(abs, F))
     end = time.clock()

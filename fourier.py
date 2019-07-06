@@ -99,8 +99,8 @@ def Fourier(Nx, Nu, u_left, u_right, x_left, x_right, f, is2d, func):
         print("another done")
     else:
         plt.plot(u, Fabs)
-        plt.xlabel('x, mm')
-        plt.ylabel('y, mm')
+        plt.xlabel('x, мм')
+        plt.ylabel('амплитуда')
         plt.grid()
         plt.savefig(
             "plots/pe_odd_u(" + str(u_left) + ", " + str(u_right) + ", " + str(Nu) + ")_x(" + str(

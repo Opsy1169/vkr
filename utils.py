@@ -45,12 +45,12 @@ def plotSmthn():
 def Pearcey():
     Nx = 4001
     Nu = 701
-    u_left = -4
-    u_right = 4
-    x_left = -3
-    x_right = 3
+    u_left = -3
+    u_right = 3
+    x_left = -1
+    x_right = 2
     F = [0] * Nu
-    f = 200
+    f = 100
     k = 2 * np.pi / (0.000633 * f)
     Fabs = fourier.Fourier(Nx, Nu, u_left, u_right, x_left, x_right, f, False, beams.Pe)
     maxVal = np.amax(Fabs)
@@ -138,13 +138,13 @@ def gauss1():
     plt.show()
 
 def Airy():
-    Nx = 3501
-    Nu = 2001
+    Nx = 2001
+    Nu = 1001
     u_left = -.1
-    u_right = 15
-    x_left = -4
-    x_right = 4
-    f = 1000
+    u_right = 4
+    x_left = -2
+    x_right = 2
+    f = 1300
     k = 2 * np.pi / (0.000633 * f)
     fourier.Fourier(Nx, Nu, u_left, u_right, x_left, x_right, f, False, beams.Ai)
 
@@ -159,6 +159,17 @@ def PearceyOdd():
     f = 1000
     k = 2 * np.pi / (0.000633 * f)
     fourier.Fourier(Nx, Nu, u_left, u_right, x_left, x_right, f, False, beams.PeOdd)
+
+def AiEven():
+    Nx = 2501
+    Nu = 2001
+    u_left = -3
+    u_right = 3
+    x_left = -1
+    x_right = 1
+    f = 2000
+    k = 2 * np.pi / (0.000633 * f)
+    fourier.Fourier(Nx, Nu, u_left, u_right, x_left, x_right, f, False, beams.AiEven)
 
 
 def InitialAiryPhaze():
@@ -446,11 +457,11 @@ def fresnel_four_comparing(f, z, Nx, x_left, x_right, Nu, u, func):
 
 def beamsForDifferentFocus(f, func):
     Nx = 2001
-    Nu = 2001
-    u_left = -3
-    u_right = 5
-    x_left = -1
-    x_right = 1
+    Nu = 1001
+    u_left = -4
+    u_right = 4
+    x_left = -2
+    x_right = 2
     z = 400
     u = np.linspace(u_left, u_right, Nu)
     x = np.linspace(x_left, x_right, Nx)
@@ -463,8 +474,8 @@ def beamsForDifferentFocus(f, func):
         Fmid[i] = func((x[i] + x[i + 1]) / 2) * (x[i + 1] - x[i])
         new_x.append((x[i + 1] + x[i]) / 2)
     for i in range(len(f)):
-        # a = fourier.fourierArr(Nx, x_right, x_left, f[i], u, func)
-        a = fresnel_four(f[i], z, Nx, Nu, new_x, u, Fmid)
+        a = fourier.fourierArr(Nx, x_right, x_left, f[i], u, func)
+        # a = fresnel_four(f[i], z, Nx, Nu, new_x, u, Fmid)
         a = np.array(a)
         # plt.plot(a, u)
         leg.append('f = ' + str(f[i]) + ', mm')
@@ -472,6 +483,8 @@ def beamsForDifferentFocus(f, func):
         max_x.append(u[a.argmax()])
     print(max_x)
     plt.legend(leg)
+    plt.xlabel('х, мм')
+    plt.ylabel('амплитуда')
     plt.show()
 
     plt.plot(f, max_x)
